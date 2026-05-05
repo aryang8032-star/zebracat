@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+    --font-instrument: 'Instrument Serif', serif;
+    --font-jetbrains: 'JetBrains Mono', monospace;
+
+    /* Brand tokens */
+    --violet: #6F4CF5;
+    --indigo-deep: #3B2EE0;
+    --cyan-brand: #22D3EE;
+    --ink: #0B0A1F;
+    --offwhite: #F7F5FF;
+
+    /* Radii */
+    --radius: 0.75rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(11, 10, 31, 0.08);
+    --shadow-md: 0 4px 24px rgba(11, 10, 31, 0.08);
+    --shadow-lg: 0 8px 40px rgba(11, 10, 31, 0.12);
+  }
+
+  .dark {
+    --offwhite: #0B0A1F;
+    --ink: #F7F5FF;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-offwhite text-ink font-sans;
+    overflow-x: hidden;
+  }
+
+  .dark body {
+    @apply bg-ink text-offwhite;
+  }
+
+  ::selection {
+    background-color: rgba(111, 76, 245, 0.25);
+    color: #0B0A1F;
+  }
+
+  .dark ::selection {
+    background-color: rgba(111, 76, 245, 0.4);
+    color: #F7F5FF;
+  }
+
+  /* Skip to content */
+  .skip-to-content {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-violet-500 focus:text-white focus:rounded-lg focus:font-sans;
+  }
+
+  /* Smooth scrollbar */
+  html.lenis {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+}
+
+@layer components {
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-cyan-brand;
+  }
+
+  /* Pill button base */
+  .pill-btn {
+    @apply inline-flex items-center gap-0 rounded-full font-sans font-semibold transition-all duration-300 cursor-pointer;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/80 dark:bg-ink/80 backdrop-blur-md border border-white/20 dark:border-white/10;
+  }
+
+  /* Gradient border card */
+  .gradient-border {
+    position: relative;
+    background: #fff;
+    border-radius: 1rem;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 1.05rem;
+    background: linear-gradient(135deg, rgba(111, 76, 245, 0.5), rgba(34, 211, 238, 0.3));
+    z-index: -1;
+  }
+
+  .dark .gradient-border {
+    background: #1A1835;
+  }
+
+  /* Animated mesh gradient */
+  .mesh-gradient {
+    background: var(--mesh-gradient, radial-gradient(at 40% 20%, rgba(111, 76, 245, 0.25) 0px, transparent 50%), radial-gradient(at 80% 0%, rgba(59, 46, 224, 0.2) 0px, transparent 50%), radial-gradient(at 0% 50%, rgba(34, 211, 238, 0.15) 0px, transparent 50%));
+    animation: gradient-shift 8s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  /* Section padding */
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-36;
+  }
+
+  /* Container */
+  .container-wide {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Typography */
+  .display-xl {
+    @apply text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05];
+  }
+
+  .display-lg {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1];
+  }
+
+  .display-md {
+    @apply text-3xl md:text-4xl font-bold tracking-tight leading-[1.15];
+  }
+
+  .body-lg {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+
+  .label-sm {
+    @apply text-xs font-semibold tracking-widest uppercase;
+  }
+
+  /* Section label chip */
+  .section-chip {
+    @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-500 text-xs font-semibold tracking-widest uppercase font-sans;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar but allow scroll */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Text balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Gradient border utility */
+  .border-gradient {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
