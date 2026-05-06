@@ -1,21 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none" role="img" aria-label="Zebracat AI Publicity logo mark">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250" fill="none" role="img" aria-label="Zebracat AI Publicity logo mark">
+  <defs>
+    <!-- Silver legs get a subtle bevel: lighter on the far edge, darker near crimson -->
+    <linearGradient id="sgL" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D8D8D8"/>
+      <stop offset="100%" stop-color="#A0A0A0"/>
+    </linearGradient>
+    <linearGradient id="sgR" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A0A0A0"/>
+      <stop offset="100%" stop-color="#D8D8D8"/>
+    </linearGradient>
+    <!-- Crimson legs: darker in shadow near spine, brighter on face -->
+    <linearGradient id="crL" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6B0000"/>
+      <stop offset="60%" stop-color="#8B0000"/>
+      <stop offset="100%" stop-color="#6B0000"/>
+    </linearGradient>
+    <linearGradient id="crR" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6B0000"/>
+      <stop offset="40%" stop-color="#8B0000"/>
+      <stop offset="100%" stop-color="#6B0000"/>
+    </linearGradient>
+    <!-- Crossbar face gradient -->
+    <linearGradient id="cbG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7A0000"/>
+      <stop offset="50%" stop-color="#9B0000"/>
+      <stop offset="100%" stop-color="#7A0000"/>
+    </linearGradient>
+    <!-- Orb radial glow -->
+    <radialGradient id="orbG" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#7A3060"/>
+      <stop offset="100%" stop-color="#2A0D1E"/>
+    </radialGradient>
+  </defs>
+
   <!-- Outer silver-grey left leg -->
-  <polygon points="100,18 8,228 38,228 100,56" fill="#BDBDBD"/>
-  <!-- Crimson left leg -->
-  <polygon points="100,18 24,228 62,228 100,50" fill="#900000"/>
+  <polygon points="100,18 5,242 37,242 100,56" fill="url(#sgL)"/>
+  <!-- Crimson left leg (sits in front of silver) -->
+  <polygon points="100,18 22,242 61,242 100,50" fill="url(#crL)"/>
+
   <!-- Crimson right leg -->
-  <polygon points="100,18 138,228 176,228 100,50" fill="#900000"/>
+  <polygon points="100,18 139,242 178,242 100,50" fill="url(#crR)"/>
   <!-- Outer silver-grey right leg -->
-  <polygon points="100,18 162,228 192,228 100,56" fill="#BDBDBD"/>
+  <polygon points="100,18 163,242 195,242 100,56" fill="url(#sgR)"/>
+
   <!-- Dark centre spine -->
-  <polygon points="100,18 91,228 109,228" fill="#1A1A1A"/>
-  <!-- Crossbar crimson -->
-  <polygon points="42,158 158,158 160,170 40,170" fill="#900000"/>
-  <!-- Crossbar inner dark -->
-  <polygon points="91,158 109,158 109,170 91,170" fill="#1A1A1A"/>
+  <polygon points="100,18 90,242 110,242" fill="#181818"/>
+
+  <!-- Crossbar crimson face -->
+  <polygon points="36,150 164,150 166,165 34,165" fill="url(#cbG)"/>
+  <!-- Crossbar spine overlay (dark) -->
+  <polygon points="90,150 110,150 110,165 90,165" fill="#181818"/>
+
   <!-- Antenna stem -->
-  <rect x="99" y="14" width="2" height="8" fill="#900000"/>
+  <rect x="99" y="14" width="2" height="8" fill="#8B0000"/>
+
   <!-- Finial orb -->
-  <circle cx="100" cy="11" r="9" fill="#3D1530"/>
-  <circle cx="100" cy="11" r="5" fill="#5C2248" opacity="0.8"/>
+  <circle cx="100" cy="10" r="9" fill="url(#orbG)"/>
+  <circle cx="97" cy="7" r="3" fill="#9B5080" opacity="0.5"/>
 </svg>
