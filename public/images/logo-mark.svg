@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none" role="img" aria-label="Zebracat AI Publicity logo mark">
+  <!-- Outer silver-grey left leg -->
+  <polygon points="100,18 8,228 38,228 100,56" fill="#BDBDBD"/>
+  <!-- Crimson left leg -->
+  <polygon points="100,18 24,228 62,228 100,50" fill="#900000"/>
+  <!-- Crimson right leg -->
+  <polygon points="100,18 138,228 176,228 100,50" fill="#900000"/>
+  <!-- Outer silver-grey right leg -->
+  <polygon points="100,18 162,228 192,228 100,56" fill="#BDBDBD"/>
+  <!-- Dark centre spine -->
+  <polygon points="100,18 91,228 109,228" fill="#1A1A1A"/>
+  <!-- Crossbar crimson -->
+  <polygon points="42,158 158,158 160,170 40,170" fill="#900000"/>
+  <!-- Crossbar inner dark -->
+  <polygon points="91,158 109,158 109,170 91,170" fill="#1A1A1A"/>
+  <!-- Antenna stem -->
+  <rect x="99" y="14" width="2" height="8" fill="#900000"/>
+  <!-- Finial orb -->
+  <circle cx="100" cy="11" r="9" fill="#3D1530"/>
+  <circle cx="100" cy="11" r="5" fill="#5C2248" opacity="0.8"/>
+</svg>

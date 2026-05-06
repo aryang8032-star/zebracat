@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Facebook, Twitter, Instagram, Linkedin,
   Mail, Phone, MapPin, ArrowUpRight, Zap
@@ -59,12 +60,12 @@ export function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-deep flex items-center justify-center shadow-violet">
-                <svg viewBox="0 0 24 24" className="w-6 h-6" aria-hidden>
-                  <path d="M12 2L3 19h4.5L12 9l4.5 10H21L12 2z" fill="white" />
-                  <path d="M8 15h8" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </div>
+              <Image
+                src="/images/logo-mark.svg"
+                alt="Zebracat logo mark"
+                width={40}
+                height={40}
+              />
               <div>
                 <div className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-brand">
                   Zebracat

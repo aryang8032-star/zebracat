@@ -164,12 +164,12 @@ export function Hero() {
           >
             <Link
               href="/book"
-              className="group flex items-center rounded-full overflow-hidden shadow-violet hover:shadow-violet-lg transition-shadow duration-300"
+              className="group inline-flex items-stretch rounded-full overflow-hidden shadow-violet hover:shadow-violet-lg transition-shadow duration-300"
             >
-              <span className="flex items-center gap-2 bg-violet-500 group-hover:bg-violet-600 text-white font-semibold px-6 py-3.5 text-base transition-colors">
+              <span className="flex items-center gap-2 bg-violet-500 group-hover:bg-violet-600 text-white font-semibold px-7 py-4 text-base transition-colors">
                 Get Instant Quote
               </span>
-              <span className="flex items-center justify-center bg-violet-600 group-hover:bg-violet-700 text-white w-12 h-12 transition-colors" aria-hidden>
+              <span className="flex items-center justify-center bg-violet-600 group-hover:bg-violet-700 text-white px-4 transition-colors" aria-hidden>
                 <ArrowUpRight className="w-5 h-5" />
               </span>
             </Link>
