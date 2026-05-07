@@ -61,7 +61,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-6">
               <Image
-                src="/images/logo-mark.svg"
+                src="/images/converted_logo.png"
                 alt="Zebracat logo mark"
                 width={40}
                 height={40}

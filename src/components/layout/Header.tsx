@@ -29,7 +29,7 @@ const serviceIcons: Record<string, React.ComponentType<React.SVGProps<SVGSVGElem
 function LogoMark({ size = 36 }: { size?: number }) {
   return (
     <Image
-      src="/images/logo-mark.svg"
+      src="/images/converted_logo.png"
       alt="Zebracat logo mark"
       width={size}
       height={size}
