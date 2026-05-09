@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { sanityWriteClient, canWriteToSanity } from '@/lib/sanityWriteClient'
 
 const contactSchema = z.object({
   name: z.string().min(2),
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const data = contactSchema.parse(body)
+    const submittedAt = new Date().toISOString()
 
     // Email via Resend
     if (process.env.RESEND_API_KEY) {
@@ -43,12 +45,34 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    // Persist to Sanity (best-effort)
+    if (canWriteToSanity()) {
+      await sanityWriteClient
+        .create({
+          _type: 'inquiry',
+          kind: 'contact',
+          status: 'new',
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          city: data.city,
+          service: data.service,
+          budget: data.budget,
+          message: data.message,
+          source: 'website-contact-form',
+          submittedAt,
+        })
+        .catch((err) => {
+          console.error('Sanity write failed:', err)
+        })
+    }
+
     // CRM webhook (optional)
     if (process.env.CRM_WEBHOOK_URL) {
       await fetch(process.env.CRM_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, source: 'website-contact-form', timestamp: new Date().toISOString() }),
+        body: JSON.stringify({ ...data, source: 'website-contact-form', timestamp: submittedAt }),
       }).catch(() => { /* non-blocking */ })
     }
 

@@ -2,11 +2,8 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import {
-  ChevronRight, ChevronLeft, Check, Calendar, Upload, CreditCard,
+  ChevronRight, ChevronLeft, Check, Upload, CreditCard,
   Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus, Zap, Info
 } from 'lucide-react'
 import { SERVICES } from '@/lib/constants'
@@ -48,6 +45,22 @@ interface BookingState {
   creative: File | null
   aiCreativeHelp: boolean
   priceBreakdown: { base: number; slots: number; production: number; gst: number }
+  name: string
+  email: string
+  phone: string
+}
+
+function computePrice(booking: BookingState) {
+  const basePrice = 25000
+  const multiplier = booking.cities.length || 1
+  const slotMult = booking.slotType === 'prime' ? 2.5 : booking.slotType === 'evening' ? 2.0 : 1.5
+  const base = basePrice * multiplier
+  const slots = Math.round(base * (slotMult - 1))
+  const production = booking.aiCreativeHelp ? 0 : 5000
+  const subtotal = base + slots + production
+  const gst = Math.round(subtotal * 0.18)
+  const total = subtotal + gst
+  return { base, slots, production, gst, total }
 }
 
 function StepIndicator({ currentStep }: { currentStep: number }) {
@@ -305,18 +318,40 @@ function Step4({ booking, setBooking }: { booking: BookingState; setBooking: (b:
   )
 }
 
-function Step5({ booking }: { booking: BookingState }) {
-  const basePrice = 25000
-  const multiplier = booking.cities.length || 1
-  const slotMult = booking.slotType === 'prime' ? 2.5 : booking.slotType === 'evening' ? 2.0 : 1.5
-  const base = basePrice * multiplier
-  const slots = Math.round(base * (slotMult - 1))
-  const production = booking.aiCreativeHelp ? 0 : 5000
-  const subtotal = base + slots + production
-  const gst = Math.round(subtotal * 0.18)
-  const total = subtotal + gst
-
+function Step5({
+  booking,
+  setBooking,
+  onSubmit,
+  status,
+  errorMsg,
+}: {
+  booking: BookingState
+  setBooking: (b: BookingState) => void
+  onSubmit: () => void
+  status: 'idle' | 'submitting' | 'success' | 'error'
+  errorMsg: string
+}) {
+  const { base, slots, production, gst, total } = computePrice(booking)
   const selectedService = SERVICES.find((s) => s.id === booking.service)
+
+  const contactValid =
+    booking.name.trim().length >= 2 &&
+    /\S+@\S+\.\S+/.test(booking.email) &&
+    booking.phone.trim().length >= 10
+
+  if (status === 'success') {
+    return (
+      <div className="text-center py-8">
+        <div className="w-14 h-14 rounded-full bg-success/15 flex items-center justify-center mx-auto mb-4">
+          <Check className="w-7 h-7 text-success" aria-hidden />
+        </div>
+        <h3 className="font-bold text-xl text-ink dark:text-white mb-2">Request received</h3>
+        <p className="text-sm text-ink/60 dark:text-white/50 max-w-sm mx-auto">
+          Thanks {booking.name.split(' ')[0] || 'there'}! Our team will reach out within 24 hours with your detailed quote.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -359,12 +394,55 @@ function Step5({ booking }: { booking: BookingState }) {
         </div>
       </div>
 
+      {/* Contact details */}
+      <div className="mb-6">
+        <p className="text-xs font-semibold text-ink/60 dark:text-white/50 mb-3 uppercase tracking-wider">Your Contact Details</p>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <input
+            type="text"
+            placeholder="Full name"
+            value={booking.name}
+            onChange={(e) => setBooking({ ...booking, name: e.target.value })}
+            aria-label="Full name"
+            className="px-4 py-3 rounded-xl border border-ink/15 dark:border-white/15 bg-white dark:bg-white/5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={booking.email}
+            onChange={(e) => setBooking({ ...booking, email: e.target.value })}
+            aria-label="Email"
+            className="px-4 py-3 rounded-xl border border-ink/15 dark:border-white/15 bg-white dark:bg-white/5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          />
+          <input
+            type="tel"
+            placeholder="Phone (10+ digits)"
+            value={booking.phone}
+            onChange={(e) => setBooking({ ...booking, phone: e.target.value })}
+            aria-label="Phone"
+            className="px-4 py-3 rounded-xl border border-ink/15 dark:border-white/15 bg-white dark:bg-white/5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+          />
+        </div>
+      </div>
+
+      {status === 'error' && (
+        <p role="alert" className="text-sm text-red-500 mb-4">{errorMsg || 'Something went wrong. Please try again.'}</p>
+      )}
+
       <div className="grid sm:grid-cols-2 gap-3">
-        <button className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-colors shadow-violet">
+        <button
+          disabled
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-violet-500/40 text-white font-semibold cursor-not-allowed"
+          title="Payments coming soon"
+        >
           <CreditCard className="w-4 h-4" aria-hidden /> Pay Now
         </button>
-        <button className="flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-ink/15 dark:border-white/15 text-ink dark:text-white font-semibold hover:border-violet-500 hover:text-violet-500 transition-all">
-          Request Callback
+        <button
+          onClick={onSubmit}
+          disabled={!contactValid || status === 'submitting'}
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-ink/15 dark:border-white/15 text-ink dark:text-white font-semibold hover:border-violet-500 hover:text-violet-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+        >
+          {status === 'submitting' ? 'Sending…' : 'Request Callback'}
         </button>
       </div>
       <p className="text-center text-xs text-ink/40 dark:text-white/30 mt-3">
@@ -385,7 +463,12 @@ export function BookingWizard() {
     creative: null,
     aiCreativeHelp: true,
     priceBreakdown: { base: 0, slots: 0, production: 0, gst: 0 },
+    name: '',
+    email: '',
+    phone: '',
   })
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
 
   const canNext = () => {
     if (step === 1) return !!booking.service
@@ -393,6 +476,40 @@ export function BookingWizard() {
     if (step === 3) return !!booking.startDate && !!booking.endDate && !!booking.slotType
     if (step === 4) return booking.aiCreativeHelp || !!booking.creative
     return true
+  }
+
+  const handleSubmit = async () => {
+    setStatus('submitting')
+    setErrorMsg('')
+    try {
+      const res = await fetch('/api/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: booking.name.trim(),
+          email: booking.email.trim(),
+          phone: booking.phone.trim(),
+          service: booking.service ?? '',
+          cities: booking.cities,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          slot: booking.slotType,
+          hasCreative: !!booking.creative,
+          wantsAiCreative: booking.aiCreativeHelp,
+          creativeName: booking.creative?.name,
+          priceBreakdown: computePrice(booking),
+          consent: true,
+        }),
+      })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body.error || `Request failed (${res.status})`)
+      }
+      setStatus('success')
+    } catch (err) {
+      setStatus('error')
+      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong')
+    }
   }
 
   return (
@@ -412,7 +529,15 @@ export function BookingWizard() {
             {step === 2 && <Step2 booking={booking} setBooking={setBooking} />}
             {step === 3 && <Step3 booking={booking} setBooking={setBooking} />}
             {step === 4 && <Step4 booking={booking} setBooking={setBooking} />}
-            {step === 5 && <Step5 booking={booking} />}
+            {step === 5 && (
+              <Step5
+                booking={booking}
+                setBooking={setBooking}
+                onSubmit={handleSubmit}
+                status={status}
+                errorMsg={errorMsg}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
 
