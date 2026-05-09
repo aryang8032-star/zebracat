@@ -164,14 +164,10 @@ export function Hero() {
           >
             <Link
               href="/book"
-              className="group inline-flex items-stretch rounded-full overflow-hidden shadow-violet hover:shadow-violet-lg transition-shadow duration-300"
+              className="group inline-flex items-center gap-2 rounded-full bg-violet-500 hover:bg-violet-600 text-white font-semibold px-7 py-4 text-base shadow-violet hover:shadow-violet-lg transition-all duration-300"
             >
-              <span className="flex items-center gap-2 bg-violet-500 group-hover:bg-violet-600 text-white font-semibold px-7 py-4 text-base transition-colors">
-                Get Instant Quote
-              </span>
-              <span className="flex items-center justify-center bg-violet-600 group-hover:bg-violet-700 text-white px-4 transition-colors" aria-hidden>
-                <ArrowUpRight className="w-5 h-5" />
-              </span>
+              Get Instant Quote
+              <ArrowUpRight className="w-5 h-5" aria-hidden />
             </Link>
 
             <Link
@@ -242,23 +238,6 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-        aria-hidden
-      >
-        <span className="text-white/30 text-xs font-sans tracking-widest uppercase">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center pt-1.5"
-        >
-          <div className="w-1 h-2 rounded-full bg-violet-500" />
-        </motion.div>
-      </motion.div>
     </section>
   )
 }
