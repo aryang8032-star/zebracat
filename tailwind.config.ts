@@ -78,8 +78,8 @@ const config: Config = {
         'glow': '0 0 0 1px rgba(111, 76, 245, 0.3), 0 4px 24px rgba(111, 76, 245, 0.15)',
       },
       animation: {
-        'marquee': 'marquee 30s linear infinite',
-        'marquee-reverse': 'marquee-reverse 30s linear infinite',
+        'marquee': 'marquee 50s linear infinite',
+        'marquee-reverse': 'marquee-reverse 50s linear infinite',
         'float': 'float 6s ease-in-out infinite',
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'spin-slow': 'spin 20s linear infinite',
