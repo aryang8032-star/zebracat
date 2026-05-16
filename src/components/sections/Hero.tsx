@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowUpRight, Star } from 'lucide-react'
 import { COMPANY, SERVICES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -33,6 +33,18 @@ export function Hero() {
   const prefersReducedMotion = useReducedMotion()
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springX = useSpring(mouseX, { stiffness: 80, damping: 30 })
+  const springY = useSpring(mouseY, { stiffness: 80, damping: 30 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (prefersReducedMotion) return
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
+    mouseX.set(((e.clientX - left) / width - 0.5) * 60)
+    mouseY.set(((e.clientY - top) / height - 0.5) * 60)
+  }
+
   useEffect(() => {
     if (prefersReducedMotion) return
 
@@ -57,6 +69,8 @@ export function Hero() {
     <section
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-ink"
       aria-label="Hero section"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => { mouseX.set(0); mouseY.set(0) }}
     >
       {/* 3D Background scene */}
       <HeroScene activeIndex={activeIndex} />
@@ -66,6 +80,24 @@ export function Hero() {
         className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink/80 pointer-events-none"
         aria-hidden
       />
+
+      {/* Spring parallax glow — follows cursor with spring physics */}
+      {!prefersReducedMotion && (
+        <motion.div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            x: springX,
+            y: springY,
+            top: 'calc(50% - 300px)',
+            left: 'calc(50% - 300px)',
+            width: 600,
+            height: 600,
+            background: `radial-gradient(circle, ${heroColors[activeIndex]}22 0%, transparent 65%)`,
+            filter: 'blur(90px)',
+          }}
+          aria-hidden
+        />
+      )}
 
       {/* Animated mesh gradient */}
       <div

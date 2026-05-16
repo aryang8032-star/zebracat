@@ -1,5 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 import {
   Facebook, Twitter, Instagram, Linkedin,
   Mail, Phone, MapPin, ArrowUpRight, Zap
@@ -32,8 +36,10 @@ const socials = [
 ]
 
 export function Footer() {
+  const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true })
+
   return (
-    <footer className="relative bg-ink text-white/80 overflow-hidden" aria-label="Site footer">
+    <footer ref={ref} className="relative bg-ink text-white/80 overflow-hidden" aria-label="Site footer">
       {/* Starfield background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute inset-0 bg-gradient-to-b from-ink to-ink/95" />
@@ -58,7 +64,12 @@ export function Footer() {
         {/* Main footer grid */}
         <div className="pt-16 pb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 border-b border-white/10">
           {/* Brand column */}
-          <div className="lg:col-span-2">
+          <motion.div
+            className="lg:col-span-2"
+            initial={{ opacity: 0, y: 28 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             <Link href="/" className="inline-flex items-center gap-3 mb-6">
               <Image
                 src="/images/converted_logo.png"
@@ -97,10 +108,14 @@ export function Footer() {
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Services */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4">Services</h3>
             <ul className="space-y-2">
               {SERVICES.map((s) => (
@@ -114,10 +129,14 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Company */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
             <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4">Company</h3>
             <ul className="space-y-2">
               {footerNav.company.map((link) => (
@@ -131,10 +150,14 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Contact */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             <h3 className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-4">Contact</h3>
             <ul className="space-y-4">
               <li>
@@ -184,11 +207,16 @@ export function Footer() {
                 Join Now <ArrowUpRight className="w-3 h-3" aria-hidden />
               </Link>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom strip */}
-        <div className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <motion.div
+          className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
           <div className="flex items-center gap-4 text-xs text-white/30">
             <span>© {new Date().getFullYear()} Zebracat AI Publicity. All rights reserved.</span>
           </div>
@@ -203,7 +231,7 @@ export function Footer() {
             <span>🇮🇳</span>
             <span>Made in Gurugram</span>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   )
