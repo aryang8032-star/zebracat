@@ -183,10 +183,10 @@ export function Header() {
               <Link
                 href="/dashboard"
                 className={cn(
-                  'flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium transition-colors',
+                  'flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold transition-all',
                   scrolled
-                    ? 'border-violet-500/30 text-violet-500 hover:bg-violet-500/10'
-                    : 'border-white/30 text-white hover:bg-white/10',
+                    ? 'bg-violet-500 text-white hover:bg-violet-600 shadow-sm'
+                    : 'bg-white/15 border border-white/30 text-white hover:bg-white/25 backdrop-blur-sm',
                 )}
               >
                 <LogIn className="w-3.5 h-3.5" aria-hidden />
