@@ -28,6 +28,46 @@ export const COMPANY = {
   },
 }
 
+// AI-generated marketing imagery hosted on Higgsfield CDN.
+// Keyed paths map to the Image() src used by next/image — remotePatterns is
+// already configured in next.config.mjs for the CloudFront host.
+const HF = 'https://d8j0ntlcm91z4.cloudfront.net/user_3D2cj6dkVkr8IJJ9FM1JjTjgbfh'
+
+export const SERVICE_IMAGES: Record<string, string> = {
+  newspaper: `${HF}/hf_20260523_075548_8681d39b-108c-4fc3-87eb-8b3b77e3e9bc_min.webp`,
+  radio: `${HF}/hf_20260523_075608_660e0ec9-7ede-4c51-acb9-fd3a448fe31d_min.webp`,
+  tv: `${HF}/hf_20260523_075616_c9eb0b73-c2e8-4fff-8fb2-78cf0ac6021f_min.webp`,
+  cinema: `${HF}/hf_20260523_075635_00a3c035-afbe-4484-99b6-21bf2203f0a8_min.webp`,
+  ott: `${HF}/hf_20260523_075653_0d66bf54-5a3e-4caf-82c1-53d6b26775c7_min.webp`,
+  'digital-signage': `${HF}/hf_20260523_075655_1763778f-67b4-49e8-8813-bb2e0d788628_min.webp`,
+  influencer: `${HF}/hf_20260523_075658_d85c69e7-96ec-4162-a940-d52874a13efe_min.webp`,
+  'lift-branding': `${HF}/hf_20260523_075701_cd491147-2929-4a4b-8314-4d51c2177d1c_min.webp`,
+  transit: `${HF}/hf_20260523_075704_4f53ad0e-005d-48eb-ba8f-6e7dcaf9ab04_min.webp`,
+}
+
+export const TESTIMONIAL_IMAGES: Record<string, string> = {
+  'ashutosh-rana': `${HF}/hf_20260523_075724_ab6fee01-927e-4a3e-b2ad-52e00bc2d1cc_min.webp`,
+  'amit-desai': `${HF}/hf_20260523_075727_3659a0b0-bb15-4649-8aee-b2552f6ce05d_min.webp`,
+  'ashish-shrimar': `${HF}/hf_20260523_075730_3656a9f2-ffba-4492-825c-490dee0091d7_min.webp`,
+  'shubham-sharma': `${HF}/hf_20260523_075732_c2bc5071-92cf-47e8-8b9c-3d18d303f812_min.webp`,
+  'ramesh-garg': `${HF}/hf_20260523_075735_65acda44-e2a5-4879-bf56-cb7ce7b0e786_min.webp`,
+  'mohit-narang': `${HF}/hf_20260523_075738_26495747-0513-4d22-bf63-3b8692574282_min.webp`,
+}
+
+export const BLOG_IMAGES: Record<string, string> = {
+  'newspaper-advertising-india-guide': `${HF}/hf_20260523_075740_23cbb39c-32c6-435a-b95e-071fb4f2828a_min.webp`,
+  'ooh-advertising-india': `${HF}/hf_20260523_075743_0a85aa5c-2ee1-4ad4-b4d8-e32d2067afea_min.webp`,
+  'influencer-marketing-india-sme': `${HF}/hf_20260523_075746_9640eb52-aa3d-49ab-aadb-3069308143b1_min.webp`,
+  'radio-advertising-india-tips': `${HF}/hf_20260523_075754_cb295468-a153-4317-907d-3500bd92e9fc_min.webp`,
+  'ott-advertising-india-2025': `${HF}/hf_20260523_105011_b073fd61-feaf-4ba6-ac47-bfb9e74c124d_min.webp`,
+  'cinema-advertising-india': `${HF}/hf_20260523_105014_873daee0-c761-4c7d-a460-19a21fc1b2cc_min.webp`,
+}
+
+export const SITE_IMAGES = {
+  heroPoster: `${HF}/hf_20260523_075757_b9d844c4-5497-446e-b889-1054ed7edc75_min.webp`,
+  aboutGurugram: `${HF}/hf_20260523_105017_02c5384e-adcf-40a9-98c5-84f7daa85b5a_min.webp`,
+}
+
 export const SERVICES = [
   {
     id: 'newspaper',
@@ -158,7 +198,7 @@ export const TESTIMONIALS = [
     medium: 'Lift Branding',
     rating: 5,
     text: 'Zebracat delivered exceptional lift branding campaigns across our tower network. The AI-assisted targeting was on point, and the execution was flawless. Our brand recall in the catchment area jumped significantly.',
-    avatar: '/images/testimonials/ashutosh-rana.jpg',
+    avatar: TESTIMONIAL_IMAGES['ashutosh-rana'],
   },
   {
     id: 2,
@@ -169,7 +209,7 @@ export const TESTIMONIALS = [
     medium: 'Newspaper Advertising',
     rating: 5,
     text: 'Within 48 hours, our newspaper ads were live in 12 cities simultaneously. The booking process was seamless, the creative team was brilliant, and the results were measurable. Best media agency we\'ve worked with.',
-    avatar: '/images/testimonials/amit-desai.jpg',
+    avatar: TESTIMONIAL_IMAGES['amit-desai'],
   },
   {
     id: 3,
@@ -180,7 +220,7 @@ export const TESTIMONIALS = [
     medium: 'Radio Advertising',
     rating: 5,
     text: 'Their radio planning is data-driven like nothing I\'ve seen before. They matched our audience perfectly with FM stations and time slots. CPL dropped by 35% compared to our last campaign.',
-    avatar: '/images/testimonials/ashish-shrimar.jpg',
+    avatar: TESTIMONIAL_IMAGES['ashish-shrimar'],
   },
   {
     id: 4,
@@ -191,7 +231,7 @@ export const TESTIMONIALS = [
     medium: 'Digital Signage',
     rating: 5,
     text: 'Zebracat\'s digital signage network in Ratlam helped us generate 300+ site visits in a single week. The LED screen placements were strategic and the content management was effortless.',
-    avatar: '/images/testimonials/shubham-sharma.jpg',
+    avatar: TESTIMONIAL_IMAGES['shubham-sharma'],
   },
   {
     id: 5,
@@ -202,7 +242,7 @@ export const TESTIMONIALS = [
     medium: 'Transit Media',
     rating: 4,
     text: 'We wanted pan-city visibility in Chandigarh at a reasonable budget. Zebracat\'s transit media solution was perfect — bus branding across 50+ routes gave us incredible reach. Highly recommend.',
-    avatar: '/images/testimonials/ramesh-garg.jpg',
+    avatar: TESTIMONIAL_IMAGES['ramesh-garg'],
   },
   {
     id: 6,
@@ -213,7 +253,7 @@ export const TESTIMONIALS = [
     medium: 'OTT Advertising',
     rating: 5,
     text: 'The OTT campaign Zebracat ran for us on Hotstar and JioCinema drove 4x ROAS. Their programmatic team is sharp, and the reporting dashboard was genuinely useful. Will definitely continue.',
-    avatar: '/images/testimonials/mohit-narang.jpg',
+    avatar: TESTIMONIAL_IMAGES['mohit-narang'],
   },
 ]
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { COMPANY } from '@/lib/constants'
+import Image from 'next/image'
+import { COMPANY, SITE_IMAGES } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'About Zebracat AI Publicity — India\'s 360° Media Agency',
@@ -18,11 +19,26 @@ export default function AboutPage() {
               We Are India&apos;s{' '}
               <span className="font-serif italic gradient-text">Media Growth Engine</span>
             </h1>
-            <p className="body-lg text-ink/60 dark:text-white/50 max-w-2xl">
+            <p className="body-lg text-ink/60 dark:text-white/50 max-w-2xl mb-10">
               Zebracat AI Publicity is a Gurugram-based 360° advertising and media agency combining
               a pan-India physical media network with AI-powered planning, booking and reporting tools.
               We help brands — from funded startups to established enterprises — own every media surface.
             </p>
+
+            <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden border border-ink/8 dark:border-white/8">
+              <Image
+                src={SITE_IMAGES.aboutGurugram}
+                alt="Gurugram cyber city skyline at twilight"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 896px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-5 text-white text-xs font-medium tracking-wide bg-ink/40 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                Headquartered in Gurugram · 28 states active
+              </div>
+            </div>
           </div>
 
           {/* Story sections */}

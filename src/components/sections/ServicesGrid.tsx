@@ -1,13 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import {
   Newspaper, Radio, Tv, Film, Monitor, Users,
   Building2, Bus, ArrowUpRight, Zap
 } from 'lucide-react'
-import { SERVICES } from '@/lib/constants'
+import { SERVICES, SERVICE_IMAGES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
@@ -36,7 +37,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
       <Link
         href={`/services/${service.slug}`}
         className={cn(
-          'group relative flex flex-col h-full p-6 rounded-2xl border transition-all duration-300',
+          'group relative flex flex-col h-full rounded-2xl border transition-all duration-300 overflow-hidden',
           'bg-white dark:bg-ink/50',
           'border-ink/8 dark:border-white/8',
           'hover:border-violet-500/40 hover:shadow-card-hover hover:-translate-y-1',
@@ -44,6 +45,27 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
         )}
         aria-label={`Learn more about ${service.name}`}
       >
+        {/* Hero image with icon overlay */}
+        {SERVICE_IMAGES[service.id] && (
+          <div className="relative w-full aspect-[16/9] overflow-hidden">
+            <Image
+              src={SERVICE_IMAGES[service.id]}
+              alt={`${service.name} preview`}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-ink/10 to-transparent" />
+            <div
+              className="absolute top-3 left-3 w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20"
+              style={{ backgroundColor: `${service.color}40` }}
+            >
+              <Icon className="w-5 h-5 text-white" aria-hidden />
+            </div>
+          </div>
+        )}
+
+        <div className="relative p-6 flex flex-col flex-1">
         {/* Gradient border on hover */}
         <div
           className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
@@ -52,14 +74,6 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
           }}
           aria-hidden
         />
-
-        {/* Icon */}
-        <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
-          style={{ backgroundColor: `${service.color}15` }}
-        >
-          <Icon className="w-5 h-5" style={{ color: service.color }} aria-hidden />
-        </div>
 
         {/* Service name */}
         <h3 className="font-bold text-ink dark:text-white mb-2 leading-tight group-hover:text-violet-500 transition-colors">
@@ -87,6 +101,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
           <span className="flex items-center gap-1 text-xs font-semibold text-violet-500 group-hover:gap-2 transition-all">
             Explore <ArrowUpRight className="w-3 h-3" aria-hidden />
           </span>
+        </div>
         </div>
       </Link>
     </motion.div>

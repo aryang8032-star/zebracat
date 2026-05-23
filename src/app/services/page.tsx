@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SERVICES } from '@/lib/constants'
+import Image from 'next/image'
+import { SERVICES, SERVICE_IMAGES } from '@/lib/constants'
 import { ArrowUpRight, Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -36,25 +37,39 @@ export default function ServicesPage() {
               <Link
                 key={service.id}
                 href={`/services/${service.slug}`}
-                className="group p-7 rounded-2xl bg-white dark:bg-white/5 border border-ink/8 dark:border-white/8 hover:border-violet-500/30 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
+                className="group flex flex-col rounded-2xl bg-white dark:bg-white/5 border border-ink/8 dark:border-white/8 hover:border-violet-500/30 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 overflow-hidden"
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform"
-                  style={{ backgroundColor: `${service.color}15` }}
-                >
-                  <Icon className="w-6 h-6" style={{ color: service.color }} aria-hidden />
-                </div>
-                <h2 className="font-bold text-lg text-ink dark:text-white mb-2 group-hover:text-violet-500 transition-colors">
-                  {service.name}
-                </h2>
-                <p className="text-sm text-ink/60 dark:text-white/50 leading-relaxed mb-4">
-                  {service.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-ink/40 dark:text-white/30">{service.stats}</span>
-                  <span className="flex items-center gap-1 text-xs font-semibold text-violet-500">
-                    Learn more <ArrowUpRight className="w-3.5 h-3.5" aria-hidden />
-                  </span>
+                {SERVICE_IMAGES[service.id] && (
+                  <div className="relative w-full aspect-[16/9] overflow-hidden">
+                    <Image
+                      src={SERVICE_IMAGES[service.id]}
+                      alt={`${service.name} hero image`}
+                      fill
+                      sizes="(max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
+                    <div
+                      className="absolute top-3 left-3 w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20"
+                      style={{ backgroundColor: `${service.color}40` }}
+                    >
+                      <Icon className="w-5 h-5 text-white" aria-hidden />
+                    </div>
+                  </div>
+                )}
+                <div className="p-7 flex-1 flex flex-col">
+                  <h2 className="font-bold text-lg text-ink dark:text-white mb-2 group-hover:text-violet-500 transition-colors">
+                    {service.name}
+                  </h2>
+                  <p className="text-sm text-ink/60 dark:text-white/50 leading-relaxed mb-4 flex-1">
+                    {service.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-ink/40 dark:text-white/30">{service.stats}</span>
+                    <span className="flex items-center gap-1 text-xs font-semibold text-violet-500">
+                      Learn more <ArrowUpRight className="w-3.5 h-3.5" aria-hidden />
+                    </span>
+                  </div>
                 </div>
               </Link>
             )

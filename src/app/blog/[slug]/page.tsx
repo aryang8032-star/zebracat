@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Clock, Calendar, ArrowUpRight } from 'lucide-react'
+import { BLOG_IMAGES } from '@/lib/constants'
 
 interface Props {
   params: { slug: string }
@@ -283,6 +285,19 @@ export default function BlogPostPage({ params }: Props) {
 
           <div className="mb-3 text-xs font-semibold text-violet-500 uppercase tracking-wider">{post.category}</div>
           <h1 className="text-3xl font-bold text-ink dark:text-white mb-4 leading-snug">{post.title}</h1>
+
+          {BLOG_IMAGES[params.slug] && (
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden my-8 border border-ink/8 dark:border-white/8">
+              <Image
+                src={BLOG_IMAGES[params.slug]}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 640px) 100vw, 640px"
+                className="object-cover"
+              />
+            </div>
+          )}
 
           <div className="flex items-center gap-4 text-xs text-ink/40 dark:text-white/30 mb-10 pb-8 border-b border-ink/10 dark:border-white/10">
             <div className="flex items-center gap-1.5">

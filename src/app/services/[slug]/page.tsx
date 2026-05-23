@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowUpRight, Check, Zap } from 'lucide-react'
-import { SERVICES } from '@/lib/constants'
+import { SERVICES, SERVICE_IMAGES } from '@/lib/constants'
 
 interface Props {
   params: { slug: string }
@@ -36,6 +37,21 @@ export default function ServicePage({ params }: Props) {
           <span>/</span>
           <span className="text-ink/70 dark:text-white/60">{service.name}</span>
         </nav>
+
+        {/* Hero image */}
+        {SERVICE_IMAGES[service.id] && (
+          <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden mb-10 border border-ink/8 dark:border-white/8">
+            <Image
+              src={SERVICE_IMAGES[service.id]}
+              alt={`${service.name} illustration`}
+              fill
+              priority
+              sizes="(max-width: 1400px) 100vw, 1400px"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent" />
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-[2fr_1fr] gap-12">
           {/* Main content */}

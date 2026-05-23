@@ -8,6 +8,10 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.sanity.io' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      // Higgsfield (Soul / Nano Banana) CDN — used for all AI-generated marketing imagery.
+      // To self-host, mirror these assets into /public/images/* and drop these patterns.
+      { protocol: 'https', hostname: 'd8j0ntlcm91z4.cloudfront.net' },
+      { protocol: 'https', hostname: 'cdn.higgsfield.ai' },
     ],
   },
   async headers() {

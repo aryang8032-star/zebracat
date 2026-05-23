@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowUpRight, Clock, Tag } from 'lucide-react'
 import { NewsletterForm } from '@/components/ui/NewsletterForm'
+import { BLOG_IMAGES } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'Blog — Advertising & Media Insights | Zebracat AI Publicity',
@@ -97,10 +99,25 @@ export default function BlogPage() {
           className="group block rounded-3xl bg-white dark:bg-white/5 border border-ink/8 dark:border-white/8 overflow-hidden hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 mb-8"
         >
           <div className="grid md:grid-cols-2 gap-0">
-            <div className="bg-gradient-violet min-h-[250px] flex items-center justify-center p-10">
-              <div className="text-center text-white">
-                <div className="text-white/60 text-sm mb-3">Featured Article</div>
-                <div className="text-3xl font-bold leading-snug">{featured.title}</div>
+            <div className="relative min-h-[250px] overflow-hidden">
+              {BLOG_IMAGES[featured.slug] ? (
+                <Image
+                  src={BLOG_IMAGES[featured.slug]}
+                  alt={featured.title}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-violet" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-tr from-ink/70 via-ink/30 to-transparent" />
+              <div className="relative h-full flex items-end p-10">
+                <div className="text-white">
+                  <div className="text-white/70 text-sm mb-2 uppercase tracking-wider">Featured Article</div>
+                  <div className="text-2xl font-bold leading-snug">{featured.title}</div>
+                </div>
               </div>
             </div>
             <div className="p-8 flex flex-col justify-center">
@@ -134,26 +151,39 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group block p-6 rounded-2xl bg-white dark:bg-white/5 border border-ink/8 dark:border-white/8 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300"
+              className="group block rounded-2xl bg-white dark:bg-white/5 border border-ink/8 dark:border-white/8 hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
-              <div
-                className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-4"
-                style={{ backgroundColor: `${categoryColors[post.category] || '#6F4CF5'}15`, color: categoryColors[post.category] || '#6F4CF5' }}
-              >
-                {post.category}
-              </div>
-              <h2 className="font-bold text-ink dark:text-white mb-3 leading-snug group-hover:text-violet-500 transition-colors">
-                {post.title}
-              </h2>
-              <p className="text-sm text-ink/50 dark:text-white/40 leading-relaxed mb-4">{post.excerpt}</p>
-              <div className="flex items-center justify-between pt-3 border-t border-ink/8 dark:border-white/8">
-                <div className="flex items-center gap-1 text-xs text-ink/30 dark:text-white/30">
-                  <Clock className="w-3.5 h-3.5" aria-hidden />
-                  {post.readTime}
+              {BLOG_IMAGES[post.slug] && (
+                <div className="relative w-full aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={BLOG_IMAGES[post.slug]}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <span className="text-xs font-semibold text-violet-500">
-                  {new Date(post.date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
-                </span>
+              )}
+              <div className="p-6">
+                <div
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full mb-4"
+                  style={{ backgroundColor: `${categoryColors[post.category] || '#6F4CF5'}15`, color: categoryColors[post.category] || '#6F4CF5' }}
+                >
+                  {post.category}
+                </div>
+                <h2 className="font-bold text-ink dark:text-white mb-3 leading-snug group-hover:text-violet-500 transition-colors">
+                  {post.title}
+                </h2>
+                <p className="text-sm text-ink/50 dark:text-white/40 leading-relaxed mb-4">{post.excerpt}</p>
+                <div className="flex items-center justify-between pt-3 border-t border-ink/8 dark:border-white/8">
+                  <div className="flex items-center gap-1 text-xs text-ink/30 dark:text-white/30">
+                    <Clock className="w-3.5 h-3.5" aria-hidden />
+                    {post.readTime}
+                  </div>
+                  <span className="text-xs font-semibold text-violet-500">
+                    {new Date(post.date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
+                  </span>
+                </div>
               </div>
             </Link>
           ))}
