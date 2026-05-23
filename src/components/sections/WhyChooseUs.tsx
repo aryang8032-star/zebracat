@@ -47,6 +47,71 @@ const features = [
   { icon: Zap, text: 'AI-assisted creative & planning' },
 ]
 
+type Reason = (typeof reasons)[number]
+
+function ReasonRow({ reason, index }: { reason: Reason; index: number }) {
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true })
+  const Icon = reason.icon
+  const isEven = index % 2 === 0
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: isEven ? -40 : 40 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.7, delay: 0.1 }}
+      className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-16 items-center`}
+    >
+      {/* Visual side */}
+      <div className="flex-1">
+        <div
+          className={`relative rounded-3xl bg-gradient-to-br ${reason.gradient} border border-ink/8 dark:border-white/8 p-10 min-h-[280px] flex items-center justify-center overflow-hidden`}
+        >
+          <div
+            className="absolute inset-0 opacity-30 pointer-events-none"
+            style={{
+              backgroundImage: `radial-gradient(circle at 50% 50%, ${reason.color}30, transparent 60%)`,
+            }}
+            aria-hidden
+          />
+          <div
+            className="w-28 h-28 rounded-3xl flex items-center justify-center shadow-lg"
+            style={{ backgroundColor: `${reason.color}20` }}
+          >
+            <Icon className="w-14 h-14" style={{ color: reason.color }} aria-hidden />
+          </div>
+        </div>
+      </div>
+
+      {/* Content side */}
+      <div className="flex-1">
+        <span className="label-sm text-violet-500 mb-3 block">{reason.subtitle}</span>
+        <h3 className="display-md text-ink dark:text-white mb-4">{reason.title}</h3>
+        <p className="body-lg text-ink/60 dark:text-white/50 mb-6">{reason.description}</p>
+        <ul className="space-y-3">
+          {reason.features.map((f) => (
+            <li key={f} className="flex items-center gap-3 text-sm font-medium text-ink/70 dark:text-white/60">
+              <div
+                className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center"
+                style={{ backgroundColor: `${reason.color}20` }}
+              >
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: reason.color }} aria-hidden />
+              </div>
+              {f}
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="/about"
+          className="inline-flex items-center gap-2 mt-6 text-sm font-semibold text-violet-500 hover:gap-3 transition-all"
+        >
+          Learn more <ArrowUpRight className="w-4 h-4" aria-hidden />
+        </Link>
+      </div>
+    </motion.div>
+  )
+}
+
 export function WhyChooseUs() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true })
 
@@ -86,69 +151,9 @@ export function WhyChooseUs() {
 
         {/* Story blocks */}
         <div className="space-y-8 mb-24">
-          {reasons.map((reason, i) => {
-            const Icon = reason.icon
-            const { ref: cardRef, inView: cardInView } = useInView({ threshold: 0.2, triggerOnce: true })
-            const isEven = i % 2 === 0
-
-            return (
-              <motion.div
-                key={reason.title}
-                ref={cardRef}
-                initial={{ opacity: 0, x: isEven ? -40 : 40 }}
-                animate={cardInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-16 items-center`}
-              >
-                {/* Visual side */}
-                <div className="flex-1">
-                  <div
-                    className={`relative rounded-3xl bg-gradient-to-br ${reason.gradient} border border-ink/8 dark:border-white/8 p-10 min-h-[280px] flex items-center justify-center overflow-hidden`}
-                  >
-                    <div
-                      className="absolute inset-0 opacity-30 pointer-events-none"
-                      style={{
-                        backgroundImage: `radial-gradient(circle at 50% 50%, ${reason.color}30, transparent 60%)`,
-                      }}
-                      aria-hidden
-                    />
-                    <div
-                      className="w-28 h-28 rounded-3xl flex items-center justify-center shadow-lg"
-                      style={{ backgroundColor: `${reason.color}20` }}
-                    >
-                      <Icon className="w-14 h-14" style={{ color: reason.color }} aria-hidden />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content side */}
-                <div className="flex-1">
-                  <span className="label-sm text-violet-500 mb-3 block">{reason.subtitle}</span>
-                  <h3 className="display-md text-ink dark:text-white mb-4">{reason.title}</h3>
-                  <p className="body-lg text-ink/60 dark:text-white/50 mb-6">{reason.description}</p>
-                  <ul className="space-y-3">
-                    {reason.features.map((f) => (
-                      <li key={f} className="flex items-center gap-3 text-sm font-medium text-ink/70 dark:text-white/60">
-                        <div
-                          className="w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center"
-                          style={{ backgroundColor: `${reason.color}20` }}
-                        >
-                          <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: reason.color }} aria-hidden />
-                        </div>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/about"
-                    className="inline-flex items-center gap-2 mt-6 text-sm font-semibold text-violet-500 hover:gap-3 transition-all"
-                  >
-                    Learn more <ArrowUpRight className="w-4 h-4" aria-hidden />
-                  </Link>
-                </div>
-              </motion.div>
-            )
-          })}
+          {reasons.map((reason, i) => (
+            <ReasonRow key={reason.title} reason={reason} index={i} />
+          ))}
         </div>
 
         {/* Features grid */}

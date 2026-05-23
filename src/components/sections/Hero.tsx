@@ -29,27 +29,26 @@ const stats = [
 export function Hero() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [displayWord, setDisplayWord] = useState(heroWords[0])
-  const [isChanging, setIsChanging] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (prefersReducedMotion) return
 
     intervalRef.current = setInterval(() => {
-      setIsChanging(true)
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setActiveIndex((prev) => {
           const next = (prev + 1) % heroWords.length
           setDisplayWord(heroWords[next])
           return next
         })
-        setIsChanging(false)
       }, 300)
     }, 3000)
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
   }, [prefersReducedMotion])
 

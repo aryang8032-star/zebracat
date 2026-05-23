@@ -74,7 +74,9 @@ export const metadata: Metadata = {
     canonical: 'https://zebracatindia.com',
     languages: { 'en-IN': 'https://zebracatindia.com', 'hi-IN': 'https://zebracatindia.com/hi' },
   },
-  verification: { google: 'your-google-verification-code' },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION }
+    : undefined,
 }
 
 export const viewport: Viewport = {

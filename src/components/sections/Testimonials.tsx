@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Star, Quote, MapPin } from 'lucide-react'
 import { TESTIMONIALS } from '@/lib/constants'
@@ -64,7 +63,6 @@ function TestimonialCard({ testimonial, index }: { testimonial: typeof TESTIMONI
 
 export function Testimonials() {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true })
-  const prefersReducedMotion = useReducedMotion()
 
   const aggregateSchema = {
     '@context': 'https://schema.org',

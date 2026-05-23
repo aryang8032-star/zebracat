@@ -1,74 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowUpRight, BarChart3, TrendingUp } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
+import { CASE_STUDIES } from '@/lib/constants'
 
 export const metadata: Metadata = {
   title: 'Case Studies — Campaign Results & Success Stories | Zebracat AI Publicity',
   description: 'Real results from real campaigns. See how Zebracat AI Publicity has helped 1,200+ brands grow through strategic media buying across India.',
 }
 
-const caseStudies = [
-  {
-    slug: 'retail-digital-signage-ratlam',
-    title: 'Retail Chain Drives 300+ Site Visits via Digital Signage',
-    client: 'Shubham Sharma, Real Estate Developer',
-    city: 'Ratlam',
-    mediums: ['Digital Signage'],
-    industry: 'Real Estate',
-    results: { reach: '5 Lakh+', leads: '300+', cpl: '₹280' },
-    summary: 'Strategic LED screen placements across Ratlam drove 300+ site visits for a residential project launch in a single week.',
-  },
-  {
-    slug: 'edtech-newspaper-12-cities',
-    title: 'EdTech Brand Goes Live in 12 Cities in 48 Hours',
-    client: 'Amit Desai, EdTech Startup',
-    city: 'Mumbai',
-    mediums: ['Newspaper Advertising'],
-    industry: 'Education',
-    results: { reach: '45 Lakh+', signups: '1,200+', roi: '4.2×' },
-    summary: 'Zebracat\'s same-day newspaper booking engine launched pan-India ads for an EdTech brand within 48 hours of brief receipt.',
-  },
-  {
-    slug: 'healthcare-transit-chandigarh',
-    title: 'Healthcare Group Achieves City-Wide Recall via Transit Media',
-    client: 'Ramesh Garg, Healthcare Group',
-    city: 'Chandigarh',
-    mediums: ['Transit Media'],
-    industry: 'Healthcare',
-    results: { reach: '18 Lakh/week', routesCovered: '50+', brandRecall: '+42%' },
-    summary: 'Bus branding across 50+ Chandigarh routes gave a healthcare network city-wide visibility at a fraction of TV costs.',
-  },
-  {
-    slug: 'fmcg-radio-campaign',
-    title: 'FMCG Brand Cuts CPL by 35% with AI-Optimised Radio Slots',
-    client: 'Ashish Shrimar, FMCG Company',
-    city: 'Delhi',
-    mediums: ['Radio Advertising'],
-    industry: 'FMCG',
-    results: { stations: '8', duration: '4 weeks', cplReduction: '35%' },
-    summary: 'AI-driven radio station and slot selection reduced CPL by 35% for an FMCG product launch across Delhi NCR.',
-  },
-  {
-    slug: 'lift-branding-d2c',
-    title: 'D2C Brand Builds Neighbourhood Presence via Lift Branding',
-    client: 'Mohit Narang, D2C Brand',
-    city: 'Gurgaon',
-    mediums: ['Lift Branding', 'OTT Advertising'],
-    industry: 'Consumer / D2C',
-    results: { lifts: '800+', impressionsPerDay: '40,000+', roas: '4×' },
-    summary: 'Combined lift branding in Gurgaon towers with OTT retargeting created a surround-sound effect for a D2C brand launch.',
-  },
-  {
-    slug: 'retail-lift-branding-gurgaon',
-    title: 'Retail Chain Sees Brand Recall Jump in Catchment Area',
-    client: 'Ashutosh Rana, Marketing Head',
-    city: 'Gurgaon',
-    mediums: ['Lift Branding'],
-    industry: 'Retail',
-    results: { towersTargeted: '150+', residents: '60,000+', recallLift: '+55%' },
-    summary: 'Precision lift branding across 150+ Gurgaon residential towers drove a 55% brand recall uplift in the target catchment.',
-  },
-]
+const caseStudies = CASE_STUDIES
 
 const mediumColors: Record<string, string> = {
   'Digital Signage': '#6F4CF5', 'Newspaper Advertising': '#3B2EE0', 'Transit Media': '#14B8A6',

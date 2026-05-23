@@ -31,21 +31,37 @@ const socials = [
   { label: 'LinkedIn', href: COMPANY.socials.linkedin, icon: Linkedin },
 ]
 
+// Deterministic pseudo-random star positions so server and client render the same DOM.
+// Generated from a seeded LCG so the layout is stable across SSR boundaries.
+const STAR_POSITIONS = Array.from({ length: 60 }, (_, i) => {
+  const seed = (i + 1) * 9301 + 49297
+  const r1 = ((seed * 233280) % 100) / 100
+  const r2 = ((seed * 49297) % 100) / 100
+  const r3 = ((seed * 9301) % 100) / 100
+  const r4 = ((seed * 233) % 100) / 100
+  return {
+    top: r1 * 100,
+    left: r2 * 100,
+    delay: r3 * 5,
+    duration: 2 + r4 * 3,
+  }
+})
+
 export function Footer() {
   return (
     <footer className="relative bg-ink text-white/80 overflow-hidden" aria-label="Site footer">
       {/* Starfield background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute inset-0 bg-gradient-to-b from-ink to-ink/95" />
-        {Array.from({ length: 60 }).map((_, i) => (
+        {STAR_POSITIONS.map((star, i) => (
           <div
             key={i}
             className="absolute w-px h-px bg-white rounded-full opacity-20"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
+              top: `${star.top}%`,
+              left: `${star.left}%`,
+              animationDelay: `${star.delay}s`,
+              animationDuration: `${star.duration}s`,
             }}
           />
         ))}

@@ -177,13 +177,12 @@ export function PartnerNetwork() {
               >
                 Join ZAP STAR <ArrowUpRight className="w-4 h-4" aria-hidden />
               </Link>
-              <a
+              <Link
                 href={ZAP_STAR.deckUrl}
                 className="flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-white font-semibold hover:border-white/40 hover:bg-white/5 transition-all"
-                download
               >
-                Download Deck
-              </a>
+                Request Deck
+              </Link>
             </motion.div>
           </div>
         </div>

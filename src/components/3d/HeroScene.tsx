@@ -43,15 +43,13 @@ function NewsKiosk({ active }: { active: boolean }) {
 function RadioTower({ active }: { active: boolean }) {
   const waveRef = useRef<THREE.Mesh>(null)
 
+  // Mutate opacity on the existing material instead of allocating a new one
+  // every frame, which leaked materials and triggered constant GC pauses.
   useFrame((state) => {
     if (waveRef.current && active) {
       waveRef.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 3) * 0.15)
-      waveRef.current.material = new THREE.MeshStandardMaterial({
-        color: '#22D3EE',
-        transparent: true,
-        opacity: 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.1,
-        wireframe: true,
-      })
+      const mat = waveRef.current.material as THREE.MeshStandardMaterial
+      mat.opacity = 0.3 + Math.sin(state.clock.elapsedTime * 3) * 0.1
     }
   })
 

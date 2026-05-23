@@ -27,13 +27,12 @@ export default function ZapStarPage() {
             >
               Apply Now <ArrowUpRight className="w-4 h-4" aria-hidden />
             </Link>
-            <a
+            <Link
               href={ZAP_STAR.deckUrl}
-              download
               className="flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white font-semibold hover:bg-white/5 transition-all"
             >
-              Download Deck
-            </a>
+              Request Deck
+            </Link>
           </div>
         </div>
 

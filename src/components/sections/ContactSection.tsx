@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { MapPin, Phone, Mail, MessageCircle, CheckCircle2, Loader2, ArrowUpRight } from 'lucide-react'
+import { MapPin, Phone, Mail, MessageCircle, CheckCircle2, Loader2, ArrowUpRight, AlertCircle } from 'lucide-react'
 import { COMPANY, SERVICES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -30,6 +30,7 @@ const budgetRanges = [
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true })
 
   const {
@@ -37,27 +38,48 @@ export function ContactSection() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
   })
 
+  // Pre-fill service when arriving via ?subject=zap-star or ?service=<id>.
+  // Read window.location.search directly to avoid a Suspense boundary requirement
+  // that useSearchParams() imposes on statically-rendered pages.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const subject = params.get('subject')
+    const service = params.get('service')
+    if (subject === 'zap-star') {
+      setValue('service', 'multiple')
+      setValue('message', "I'm interested in the ZAP STAR partner program.")
+    } else if (service && SERVICES.some((s) => s.id === service)) {
+      setValue('service', service)
+    }
+  }, [setValue])
+
   const onSubmit = async (data: ContactForm) => {
     setLoading(true)
+    setSubmitError(null)
     try {
-      await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       })
+      if (!res.ok) {
+        const payload = await res.json().catch(() => ({}))
+        throw new Error(payload?.error ?? `Request failed (${res.status})`)
+      }
       setSubmitted(true)
       reset()
       if (typeof window !== 'undefined') {
         const confetti = (await import('canvas-confetti')).default
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#6F4CF5', '#22D3EE', '#3B2EE0'] })
       }
-    } catch {
-      // Silently handle error, form still shows success for demo
-      setSubmitted(true)
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Could not send your enquiry. Please try again or WhatsApp us.')
     } finally {
       setLoading(false)
     }
@@ -295,6 +317,16 @@ export function ContactSection() {
                   </label>
                   {errors.consent && <p id="consent-error" className="mt-1 text-xs text-red-500" role="alert">{errors.consent.message}</p>}
                 </div>
+
+                {submitError && (
+                  <div
+                    role="alert"
+                    className="mb-4 flex items-start gap-3 p-3 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/30 text-red-700 dark:text-red-300 text-sm"
+                  >
+                    <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" aria-hidden />
+                    <span>{submitError}</span>
+                  </div>
+                )}
 
                 <button
                   type="submit"

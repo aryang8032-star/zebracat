@@ -1,15 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import {
-  ChevronRight, ChevronLeft, Check, Calendar, Upload, CreditCard,
-  Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus, Zap, Info
+  ChevronRight, ChevronLeft, Check, Upload, CreditCard,
+  Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus, Zap, Info, Loader2, CheckCircle2
 } from 'lucide-react'
-import { SERVICES } from '@/lib/constants'
+import { SERVICES, COMPANY } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 const steps = [
@@ -306,6 +304,8 @@ function Step4({ booking, setBooking }: { booking: BookingState; setBooking: (b:
 }
 
 function Step5({ booking }: { booking: BookingState }) {
+  const [submitState, setSubmitState] = useState<'idle' | 'requesting' | 'done'>('idle')
+
   const basePrice = 25000
   const multiplier = booking.cities.length || 1
   const slotMult = booking.slotType === 'prime' ? 2.5 : booking.slotType === 'evening' ? 2.0 : 1.5
@@ -317,6 +317,35 @@ function Step5({ booking }: { booking: BookingState }) {
   const total = subtotal + gst
 
   const selectedService = SERVICES.find((s) => s.id === booking.service)
+
+  const whatsappMessage = `Hi Zebracat, I'd like to confirm a campaign:
+- Medium: ${selectedService?.name ?? 'TBD'}
+- Cities: ${booking.cities.join(', ') || 'TBD'}
+- Dates: ${booking.startDate || 'TBD'} to ${booking.endDate || 'TBD'}
+- Slot: ${slotTypes.find((s) => s.id === booking.slotType)?.label ?? 'TBD'}
+- Indicative total: ₹${total.toLocaleString('en-IN')} (incl. GST)`
+  const whatsappUrl = `https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`
+
+  const handleCallback = () => {
+    setSubmitState('requesting')
+    // Fire-and-forget — the contact API absorbs validation failures and won't block UI.
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Booking Wizard Lead',
+        email: 'wizard@zebracatindia.com',
+        phone: '+910000000000',
+        service: booking.service ?? 'multiple',
+        budget: `₹${total.toLocaleString('en-IN')}`,
+        city: booking.cities.join(', ') || 'Pan-India',
+        message: whatsappMessage,
+        consent: true,
+      }),
+    })
+      .catch(() => { /* ignore */ })
+      .finally(() => setSubmitState('done'))
+  }
 
   return (
     <div>
@@ -360,15 +389,30 @@ function Step5({ booking }: { booking: BookingState }) {
       </div>
 
       <div className="grid sm:grid-cols-2 gap-3">
-        <button className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-colors shadow-violet">
-          <CreditCard className="w-4 h-4" aria-hidden /> Pay Now
-        </button>
-        <button className="flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-ink/15 dark:border-white/15 text-ink dark:text-white font-semibold hover:border-violet-500 hover:text-violet-500 transition-all">
-          Request Callback
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-violet-500 text-white font-semibold hover:bg-violet-600 transition-colors shadow-violet"
+        >
+          <CreditCard className="w-4 h-4" aria-hidden /> Confirm via WhatsApp
+        </a>
+        <button
+          type="button"
+          onClick={handleCallback}
+          disabled={submitState !== 'idle'}
+          className="flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-ink/15 dark:border-white/15 text-ink dark:text-white font-semibold hover:border-violet-500 hover:text-violet-500 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+        >
+          {submitState === 'requesting' && <><Loader2 className="w-4 h-4 animate-spin" aria-hidden /> Sending</>}
+          {submitState === 'done' && <><CheckCircle2 className="w-4 h-4 text-success" aria-hidden /> Callback requested</>}
+          {submitState === 'idle' && 'Request Callback'}
         </button>
       </div>
       <p className="text-center text-xs text-ink/40 dark:text-white/30 mt-3">
-        Secure payment via Razorpay · GST invoice provided · Quote valid for 48 hours
+        Razorpay payment link is shared after our team confirms inventory · GST invoice provided · Quote valid for 48 hours
+      </p>
+      <p className="text-center text-xs text-ink/40 dark:text-white/30 mt-1">
+        Prefer the long way? <Link href="/contact" className="text-violet-500 hover:underline">Open the contact form</Link>.
       </p>
     </div>
   )

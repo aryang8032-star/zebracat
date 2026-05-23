@@ -8,15 +8,6 @@ export const metadata: Metadata = {
   description: 'Transparent indicative pricing for all advertising mediums in India. Newspaper ads from ₹5,000, radio spots from ₹10,000, TV campaigns, cinema, OTT, digital signage and more.',
 }
 
-const pricingData = SERVICES.map((s) => ({
-  ...s,
-  tiers: [
-    { name: 'Starter', price: s.budgetRange.split('–')[0].trim(), features: ['1 city', '1 week duration', 'Standard slot', 'Basic reporting'] },
-    { name: 'Growth', price: s.budgetRange, features: ['3–5 cities', '2–4 weeks', 'Prime slots available', 'Weekly reports', 'Creative assistance'] },
-    { name: 'Enterprise', price: `${s.budgetRange.split('–')[1]?.trim() ?? '₹20 Lakh'}+`, features: ['Pan-India', 'Custom duration', 'All slots', 'Live dashboard', 'Dedicated AM', 'Custom reporting'] },
-  ],
-}))
-
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-offwhite dark:bg-ink pt-28 pb-20">
@@ -45,7 +36,7 @@ export default function PricingPage() {
 
         {/* Service tabs */}
         <div className="space-y-10">
-          {SERVICES.slice(0, 5).map((service) => (
+          {SERVICES.map((service) => (
             <div key={service.id} className="bg-white dark:bg-white/5 rounded-3xl border border-ink/8 dark:border-white/8 overflow-hidden">
               <div
                 className="px-8 py-6 border-b border-ink/8 dark:border-white/8"
