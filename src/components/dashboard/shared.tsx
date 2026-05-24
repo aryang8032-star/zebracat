@@ -179,7 +179,7 @@ export const KPICard = ({ icon, label, value, change, changeDir = 'up', sub, col
 }
 
 /* ── TopBar ── */
-export const TopBar = ({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: React.ReactNode }) => {
+export const TopBar = ({ title, subtitle, actions, onMenuClick }: { title: string; subtitle?: string; actions?: React.ReactNode; onMenuClick?: () => void }) => {
   const [searchVal, setSearchVal] = useState('')
   return (
     <header style={{
@@ -187,11 +187,26 @@ export const TopBar = ({ title, subtitle, actions }: { title: string; subtitle?:
       background: 'linear-gradient(180deg, rgba(8,22,44,0.99) 0%, rgba(6,18,36,0.98) 100%)',
       backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(148,163,200,0.12)', position: 'relative', zIndex: 9,
     }}>
+      {/* Hamburger – only visible on mobile via CSS */}
+      <style>{`
+        .zc-topbar-hamburger { display: none; }
+        .zc-topbar-search { display: flex; }
+        @media (max-width: 767px) {
+          .zc-topbar-hamburger { display: flex; }
+          .zc-topbar-search { display: none; }
+        }
+      `}</style>
+      <button className="zc-topbar-hamburger" onClick={onMenuClick}
+        style={{ width: 34, height: 34, borderRadius: 8, alignItems: 'center', justifyContent: 'center', background: 'var(--b0)', border: '1px solid var(--b2)', color: 'var(--t2)', flexShrink: 0 }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--t1)', letterSpacing: '-0.01em' }}>{title}</div>
         {subtitle && <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: 1 }}>{subtitle}</div>}
       </div>
-      <div style={{ position: 'relative' }}>
+      <div className="zc-topbar-search" style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--t3)' }}>
           <Icon name="search" size={13} />
         </div>

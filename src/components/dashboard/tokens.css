@@ -208,3 +208,13 @@
 
 .zc-anim-fade-in-up { animation: zc-fade-in-up var(--dur-lg) var(--ease) both; }
 .zc-anim-fade-in    { animation: zc-fade-in var(--dur-md) var(--ease) both; }
+
+@media (max-width: 767px) {
+  .zc-dashboard {
+    --sidebar-w: 0px;
+  }
+  .zc-hide-mobile { display: none !important; }
+  .zc-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .zc-stack { flex-direction: column !important; }
+  .zc-full-mobile { width: 100% !important; min-width: 0 !important; }
+}
