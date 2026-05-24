@@ -120,6 +120,19 @@ export default function Screen4Analytics({ onNavigate }: { onNavigate: (s: strin
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <style>{`
+        .s4-kpi-row   { display: flex; gap: 12px; flex-shrink: 0; }
+        .s4-chart-row { display: flex; gap: 16px; flex-shrink: 0; }
+        .s4-city-row  { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--b0); }
+        @media (max-width: 767px) {
+          .s4-kpi-row   { flex-wrap: wrap; }
+          .s4-kpi-row > * { flex: 1 1 45%; min-width: 0; }
+          .s4-chart-row { flex-direction: column; }
+          .s4-city-row  { flex-wrap: wrap; gap: 6px; }
+          .s4-city-bar  { flex: 1 1 100% !important; }
+          .s4-city-pct  { display: none; }
+        }
+      `}</style>
       <TopBar title="Analytics" subtitle="Revenue, reach & performance intelligence"
         actions={
           <div style={{ display: 'flex', gap: 6 }}>
@@ -131,14 +144,14 @@ export default function Screen4Analytics({ onNavigate }: { onNavigate: (s: strin
       />
 
       <div style={{ flex: 1, overflow: 'hidden', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-        <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+        <div className="s4-kpi-row">
           <KPICard icon="trending" label="Total Revenue"     value={`₹${totalRevenue}L`} change="+23.1%" color="var(--purple)" delay={0} />
           <KPICard icon="eye"      label="Total Impressions" value="4.28Cr"               change="+18.4%" color="var(--blue)"   delay={60} />
           <KPICard icon="target"   label="Avg CPM"           value="₹21.4"               change="+4.2%"  color="var(--cyan)"   delay={120} />
           <KPICard icon="screen"   label="Screen Utilisation" value="83%"                change="+6.8%"  color="var(--mint)"   delay={180} />
         </div>
 
-        <div style={{ display: 'flex', gap: 16, flexShrink: 0 }}>
+        <div className="s4-chart-row">
           <div className="zc-glass-card" style={{ flex: 1, overflow: 'hidden' }}>
             <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--b1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
@@ -153,7 +166,7 @@ export default function Screen4Analytics({ onNavigate }: { onNavigate: (s: strin
                 ))}
               </div>
             </div>
-            <div style={{ padding: '14px 10px 10px', height: 185 }}>
+            <div className="zc-scroll-x" style={{ padding: '14px 10px 10px', height: 185 }}>
               <LineChart data={REVENUE} prevData={PREV_REV} labels={MONTHS} width={520} height={160} />
             </div>
           </div>
@@ -191,14 +204,14 @@ export default function Screen4Analytics({ onNavigate }: { onNavigate: (s: strin
               const pct = (val / maxVal) * 100
               const displayVal = metric === 'revenue' ? `₹${val}L` : metric === 'impressions' ? `${val}Cr` : `₹${val}`
               return (
-                <div key={row.city} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', borderBottom: '1px solid var(--b0)' }}>
+                <div key={row.city} className="s4-city-row">
                   <div style={{ flex: '0 0 100px', fontSize: 12, fontWeight: 600, color: 'var(--t1)' }}>{row.city}</div>
-                  <div style={{ flex: '0 0 42px', fontSize: 10, color: 'var(--t3)', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{row.screens}</div>
-                  <div style={{ flex: 1 }}>
+                  <div className="s4-city-pct" style={{ flex: '0 0 42px', fontSize: 10, color: 'var(--t3)', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{row.screens}</div>
+                  <div className="s4-city-bar" style={{ flex: 1 }}>
                     <ProgressBar pct={pct} color={row.color} height={5} />
                   </div>
                   <div className="zc-mono" style={{ flex: '0 0 60px', fontSize: 13, fontWeight: 700, color: 'var(--t1)', textAlign: 'right' }}>{displayVal}</div>
-                  <div style={{ flex: '0 0 52px', fontSize: 10, color: 'var(--mint)', textAlign: 'right', fontWeight: 600 }}>+{(8 + i * 1.5).toFixed(1)}%</div>
+                  <div className="s4-city-pct" style={{ flex: '0 0 52px', fontSize: 10, color: 'var(--mint)', textAlign: 'right', fontWeight: 600 }}>+{(8 + i * 1.5).toFixed(1)}%</div>
                 </div>
               )
             })}

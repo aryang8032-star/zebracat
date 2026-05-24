@@ -140,6 +140,18 @@ export default function Screen5Campaigns({ onNavigate }: { onNavigate: (s: strin
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <style>{`
+        .s5-body    { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+        .s5-list    { flex: 1; display: flex; flex-direction: column; min-height: 0; min-width: 0; border-right: 1px solid var(--b1); }
+        .s5-table-scroll { flex: 1; overflow-y: auto; overflow-x: auto; }
+        .s5-detail  { flex: 0 0 280px; border-radius: 0; border: none; border-left: 1px solid var(--b1); }
+        @media (max-width: 767px) {
+          .s5-body   { flex-direction: column; overflow-y: auto; }
+          .s5-list   { flex: 0 0 auto; min-height: 300px; border-right: none; border-bottom: 1px solid var(--b1); }
+          .s5-table-scroll { overflow-x: auto; }
+          .s5-detail { flex: 0 0 auto !important; border-left: none !important; border-top: 1px solid var(--b1); max-height: none; }
+        }
+      `}</style>
       <TopBar title="Campaigns" subtitle="Manage and monitor all active campaigns"
         actions={
           <button onClick={() => onNavigate('booking')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, cursor: 'pointer', background: 'linear-gradient(135deg, var(--purple), var(--blue))', border: 'none', color: 'white', fontSize: 12, fontWeight: 600, boxShadow: 'var(--glow-p)' }}>
@@ -147,8 +159,8 @@ export default function Screen5Campaigns({ onNavigate }: { onNavigate: (s: strin
           </button>
         }
       />
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, minWidth: 0, borderRight: '1px solid var(--b1)' }}>
+      <div className="s5-body">
+        <div className="s5-list">
           <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--b1)', display: 'flex', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
             {[['all','All'],['live','Live'],['scheduled','Scheduled'],['approved','Approved'],['pending','Pending'],['paused','Paused'],['draft','Draft']].map(([val, label]) => (
               <button key={val} onClick={() => setStatusFilter(val)} style={{ fontSize: 10, fontWeight: 600, padding: '3px 9px', borderRadius: 99, cursor: 'pointer', background: statusFilter === val ? 'var(--purple-d)' : 'transparent', border: `1px solid ${statusFilter === val ? 'var(--bglow)' : 'var(--b2)'}`, color: statusFilter === val ? 'var(--purple-l)' : 'var(--t3)', transition: 'all 0.15s' }}>
@@ -156,16 +168,18 @@ export default function Screen5Campaigns({ onNavigate }: { onNavigate: (s: strin
               </button>
             ))}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 100px 80px 80px 80px 80px 80px', padding: '6px 16px', borderBottom: '1px solid var(--b1)', flexShrink: 0 }}>
-            {['Campaign','Status','Budget','Screens','Reach','Impressions','CPM','Dates'].map(h => (
-              <div key={h} style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '2px 0' }}>{h}</div>
-            ))}
-          </div>
-          <div style={{ flex: 1, overflowY: 'auto' }}>
-            {filtered.map(c => <CampaignRow key={c.id} c={c} selected={selected?.id === c.id} onClick={setSelected} />)}
+          <div className="s5-table-scroll">
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 100px 80px 80px 80px 80px 80px', padding: '6px 16px', borderBottom: '1px solid var(--b1)', flexShrink: 0, minWidth: 660 }}>
+              {['Campaign','Status','Budget','Screens','Reach','Impressions','CPM','Dates'].map(h => (
+                <div key={h} style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', padding: '2px 0' }}>{h}</div>
+              ))}
+            </div>
+            <div style={{ minWidth: 660 }}>
+              {filtered.map(c => <CampaignRow key={c.id} c={c} selected={selected?.id === c.id} onClick={setSelected} />)}
+            </div>
           </div>
         </div>
-        <div className="zc-glass-card" style={{ flex: '0 0 280px', borderRadius: 0, border: 'none', borderLeft: '1px solid var(--b1)' }}>
+        <div className="zc-glass-card s5-detail">
           <CampaignDetail c={selected} />
         </div>
       </div>

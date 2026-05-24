@@ -46,6 +46,16 @@ export default function Screen3Studio({ onNavigate }: { onNavigate: (s: string) 
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <style>{`
+        .s3-body    { flex: 1; display: flex; gap: 16px; padding: 16px 20px; overflow: hidden; min-height: 0; }
+        .s3-left    { flex: 1; display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto; }
+        .s3-preview { flex: 0 0 300px; display: flex; flex-direction: column; gap: 12px; }
+        @media (max-width: 767px) {
+          .s3-body    { flex-direction: column; overflow-y: auto; padding: 12px 12px; }
+          .s3-left    { overflow-y: visible; min-height: 0; }
+          .s3-preview { flex: 0 0 auto !important; }
+        }
+      `}</style>
       <TopBar title="Creative Studio" subtitle="Manage, preview and submit ad creatives"
         actions={
           <div style={{ display: 'flex', gap: 8 }}>
@@ -56,9 +66,9 @@ export default function Screen3Studio({ onNavigate }: { onNavigate: (s: string) 
         }
       />
 
-      <div style={{ flex: 1, display: 'flex', gap: 16, padding: '16px 20px', overflow: 'hidden', minHeight: 0 }}>
+      <div className="s3-body">
         {/* Left */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minHeight: 0, overflowY: 'auto' }}>
+        <div className="s3-left">
 
           {activeTab === 'upload' && <>
             <div className="zc-glass-card" style={{ overflow: 'hidden' }}>
@@ -144,7 +154,7 @@ export default function Screen3Studio({ onNavigate }: { onNavigate: (s: string) 
         </div>
 
         {/* Right: Preview */}
-        <div style={{ flex: '0 0 300px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="s3-preview">
           <div className="zc-glass-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b1)', fontSize: 12, fontWeight: 600 }}>Live Preview</div>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>

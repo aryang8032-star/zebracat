@@ -37,6 +37,20 @@ export default function Screen1Dashboard({ onNavigate }: { onNavigate: (s: strin
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 0, overflow: 'hidden' }}>
+      <style>{`
+        .s1-kpi-row { display: flex; gap: 12px; flex-shrink: 0; }
+        .s1-body    { flex: 1; display: flex; gap: 16px; min-height: 0; }
+        .s1-map     { flex: 0 0 58%; display: flex; flex-direction: column; overflow: hidden; }
+        .s1-right   { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+        @media (max-width: 767px) {
+          .s1-scroll-wrap { overflow-y: auto !important; }
+          .s1-kpi-row { flex-wrap: wrap; }
+          .s1-kpi-row > * { flex: 1 1 45%; min-width: 0; }
+          .s1-body { flex-direction: column; overflow: visible !important; min-height: 0; }
+          .s1-map  { flex: 0 0 auto !important; min-height: 280px; }
+          .s1-right { flex: 0 0 auto; }
+        }
+      `}</style>
       <TopBar title="Dashboard" subtitle="ZebraCat AI Publicity · May 2026"
         actions={
           <button onClick={() => onNavigate('booking')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 8, cursor: 'pointer', background: 'linear-gradient(135deg, var(--purple), var(--blue))', border: 'none', color: 'white', fontSize: 12, fontWeight: 600, boxShadow: 'var(--glow-p)' }}>
@@ -44,18 +58,18 @@ export default function Screen1Dashboard({ onNavigate }: { onNavigate: (s: strin
           </button>
         }
       />
-      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '16px 20px', gap: 16 }}>
+      <div className="s1-scroll-wrap" style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', padding: '16px 20px', gap: 16 }}>
         {/* KPI Row */}
-        <div style={{ display: 'flex', gap: 12, flexShrink: 0 }}>
+        <div className="s1-kpi-row">
           <KPICard icon="screen"  label="Active Screens"    value="2,693"  change="+12.4%" color="var(--purple)" sparkData={SPARK_SCREENS} delay={0} />
           <KPICard icon="zap"     label="Live Campaigns"    value="47"     change="+8"     color="var(--blue)"   sparkData={SPARK_CAMPS}   delay={60} />
           <KPICard icon="trending" label="Monthly Revenue"  value="₹68.4L" change="+23.1%" color="var(--mint)"   sparkData={SPARK_REVENUE} delay={120} sub="vs ₹55.6L last month" />
           <KPICard icon="eye"     label="Impressions Today" value="4.2Cr"  change="+18.7%" color="var(--cyan)"   sparkData={SPARK_IMPRESS} delay={180} />
         </div>
 
-        <div style={{ flex: 1, display: 'flex', gap: 16, minHeight: 0 }}>
+        <div className="s1-body">
           {/* India Map */}
-          <div className="zc-glass-card" style={{ flex: '0 0 58%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div className="zc-glass-card s1-map">
             <div style={{ padding: '12px 16px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--b1)', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--mint)', animation: 'zc-pulse-dot 1.5s ease-in-out infinite' }} />
@@ -74,7 +88,7 @@ export default function Screen1Dashboard({ onNavigate }: { onNavigate: (s: strin
           </div>
 
           {/* Right panel */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minWidth: 0 }}>
+          <div className="s1-right">
             {/* City Inventory */}
             <div className="zc-glass-card" style={{ flex: '0 0 auto' }}>
               <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--b1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

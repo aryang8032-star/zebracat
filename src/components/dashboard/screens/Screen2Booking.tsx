@@ -27,32 +27,43 @@ const CITY_LIST = [
 ]
 
 const StepIndicator = ({ steps, current }: { steps: { label: string; sub: string }[]; current: number }) => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-    {steps.map((step, i) => {
-      const done = i < current, active = i === current
-      return (
-        <React.Fragment key={i}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: done ? 'var(--mint)' : active ? 'var(--purple)' : 'var(--b1)', border: `2px solid ${done ? 'var(--mint)' : active ? 'var(--purple)' : 'var(--b2)'}`, fontSize: 11, fontWeight: 700, color: done || active ? 'white' : 'var(--t3)', transition: 'all 0.3s var(--ease)', boxShadow: active ? 'var(--glow-p)' : done ? 'var(--glow-m)' : 'none', flexShrink: 0 }}>
-              {done ? <Icon name="check" size={13} /> : i + 1}
+  <>
+    <style>{`
+      .s2-step-label { display: block; }
+      .s2-step-sub   { display: block; }
+      @media (max-width: 767px) {
+        .s2-step-label { display: none; }
+        .s2-step-sub   { display: none; }
+        .s2-step-connector { min-width: 12px !important; margin: 0 6px !important; }
+      }
+    `}</style>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+      {steps.map((step, i) => {
+        const done = i < current, active = i === current
+        return (
+          <React.Fragment key={i}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: done ? 'var(--mint)' : active ? 'var(--purple)' : 'var(--b1)', border: `2px solid ${done ? 'var(--mint)' : active ? 'var(--purple)' : 'var(--b2)'}`, fontSize: 11, fontWeight: 700, color: done || active ? 'white' : 'var(--t3)', transition: 'all 0.3s var(--ease)', boxShadow: active ? 'var(--glow-p)' : done ? 'var(--glow-m)' : 'none', flexShrink: 0 }}>
+                {done ? <Icon name="check" size={13} /> : i + 1}
+              </div>
+              <div>
+                <div className="s2-step-label" style={{ fontSize: 11, fontWeight: 600, color: active ? 'var(--t1)' : done ? 'var(--mint)' : 'var(--t3)' }}>{step.label}</div>
+                <div className="s2-step-sub" style={{ fontSize: 10, color: 'var(--t3)' }}>{step.sub}</div>
+              </div>
             </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: active ? 'var(--t1)' : done ? 'var(--mint)' : 'var(--t3)' }}>{step.label}</div>
-              <div style={{ fontSize: 10, color: 'var(--t3)' }}>{step.sub}</div>
-            </div>
-          </div>
-          {i < steps.length - 1 && <div style={{ flex: 1, height: 1, background: i < current ? 'var(--mint)' : 'var(--b2)', margin: '0 12px', minWidth: 24, transition: 'background 0.4s' }} />}
-        </React.Fragment>
-      )
-    })}
-  </div>
+            {i < steps.length - 1 && <div className="s2-step-connector" style={{ flex: 1, height: 1, background: i < current ? 'var(--mint)' : 'var(--b2)', margin: '0 12px', minWidth: 24, transition: 'background 0.4s' }} />}
+          </React.Fragment>
+        )
+      })}
+    </div>
+  </>
 )
 
 type SelectedCity = { id: string; name: string; available: number }
 
 function Step1Cities({ selected, setSelected, screenTypes, setScreenTypes }: { selected: SelectedCity[]; setSelected: React.Dispatch<React.SetStateAction<SelectedCity[]>>; screenTypes: string[]; setScreenTypes: React.Dispatch<React.SetStateAction<string[]>> }) {
   return (
-    <div style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
+    <div className="s2-step-body" style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
       <div className="zc-glass-card" style={{ flex: '0 0 50%', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b1)', fontSize: 12, fontWeight: 600 }}>Select Cities on Map</div>
         <div style={{ flex: 1, padding: 8, position: 'relative' }}>
@@ -115,11 +126,12 @@ function Step2Slots({ selectedSlots, setSelectedSlots }: { selectedSlots: string
     setSelectedSlots(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key])
   }
   return (
-    <div style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
+    <div className="s2-step-body" style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
       <div className="zc-glass-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
         <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b1)', fontSize: 12, fontWeight: 600 }}>Weekly Playback Schedule — Click slots to select</div>
         <div style={{ flex: 1, overflowY: 'auto', padding: 14 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(7,1fr)', gap: 4 }}>
+          <div className="zc-scroll-x" style={{ minWidth: 0 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '100px repeat(7,1fr)', gap: 4, minWidth: 560 }}>
             <div />
             {DAYS.map(d => <div key={d} style={{ textAlign: 'center', fontSize: 10, fontWeight: 700, color: 'var(--t3)', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '4px 0' }}>{d}</div>)}
             {TIME_SLOTS.map(slot => (
@@ -138,6 +150,7 @@ function Step2Slots({ selectedSlots, setSelectedSlots }: { selectedSlots: string
               </React.Fragment>
             ))}
           </div>
+          </div>{/* end zc-scroll-x */}
           <div style={{ display: 'flex', gap: 16, marginTop: 12, padding: '8px 0', borderTop: '1px solid var(--b1)' }}>
             {[{col:'var(--purple)',label:'Selected'},{col:'rgba(245,158,11,0.4)',label:'★ Prime time'},{col:'var(--b2)',label:'Standard'}].map(({col,label}) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 10, color: 'var(--t3)' }}>
@@ -147,7 +160,7 @@ function Step2Slots({ selectedSlots, setSelectedSlots }: { selectedSlots: string
           </div>
         </div>
       </div>
-      <div style={{ flex: '0 0 220px' }}>
+      <div className="s2-slot-summary" style={{ flex: '0 0 220px' }}>
         <div className="zc-glass-card" style={{ padding: 14 }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--t2)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Slot Summary</div>
           <div className="zc-mono" style={{ fontSize: 28, fontWeight: 700, lineHeight: 1, background: 'linear-gradient(135deg, var(--purple-l), var(--cyan-l))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginBottom: 4 }}>{selectedSlots.length}</div>
@@ -168,7 +181,7 @@ function Step3Creative() {
   const [dragging, setDragging] = useState(false)
   const [uploaded, setUploaded] = useState<string|null>(null)
   return (
-    <div style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
+    <div className="s2-step-body" style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div className="zc-glass-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
           <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--b1)', fontSize: 12, fontWeight: 600 }}>Upload Creative</div>
@@ -216,7 +229,7 @@ function Step4Review({ selectedCities, selectedSlots }: { selectedCities: Select
   const screenCount = selectedCities.reduce((a, c) => a + (c.available || 150), 0)
   const estimatedBudget = screenCount * selectedSlots.length * 1400 / 100
   return (
-    <div style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
+    <div className="s2-step-body" style={{ display: 'flex', gap: 20, flex: 1, minHeight: 0 }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {[
           { title:'Cities & Screens', items: selectedCities.length ? selectedCities.map(c => ({k:c.name, v:`${c.available} screens`})) : [{k:'Delhi NCR',v:'344 screens'},{k:'Mumbai',v:'298 screens'}] },
@@ -268,6 +281,14 @@ export default function Screen2Booking({ onNavigate }: { onNavigate: (s: string)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <style>{`
+        .s2-step-body { display: flex; gap: 20px; flex: 1; min-height: 0; overflow: hidden; }
+        .s2-slot-summary { flex: 0 0 220px; }
+        @media (max-width: 767px) {
+          .s2-step-body { flex-direction: column; overflow-y: auto; min-height: 0; }
+          .s2-slot-summary { flex: 0 0 auto !important; }
+        }
+      `}</style>
       <TopBar title="Book Screens" subtitle="New Campaign · Step-by-step booking" />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '16px 20px', gap: 16, overflow: 'hidden', minHeight: 0 }}>
         <div className="zc-glass-card" style={{ padding: '14px 20px', flexShrink: 0 }}>

@@ -1,6 +1,10 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, createContext, useContext } from 'react'
+
+/* ── MenuContext: lets screens trigger the sidebar open from TopBar ── */
+export const MenuContext = createContext<(() => void) | undefined>(undefined)
+export const useMenuToggle = () => useContext(MenuContext)
 
 /* ── Icon ── */
 type IconName = keyof typeof PATHS
@@ -179,8 +183,10 @@ export const KPICard = ({ icon, label, value, change, changeDir = 'up', sub, col
 }
 
 /* ── TopBar ── */
-export const TopBar = ({ title, subtitle, actions, onMenuClick }: { title: string; subtitle?: string; actions?: React.ReactNode; onMenuClick?: () => void }) => {
+export const TopBar = ({ title, subtitle, actions, onMenuClick: onMenuClickProp }: { title: string; subtitle?: string; actions?: React.ReactNode; onMenuClick?: () => void }) => {
   const [searchVal, setSearchVal] = useState('')
+  const menuToggle = useMenuToggle()
+  const onMenuClick = onMenuClickProp ?? menuToggle
   return (
     <header style={{
       height: 'var(--topbar-h)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 16, padding: '0 24px',
@@ -239,59 +245,81 @@ const BOTTOM_ITEMS = [
   { id: 'users', icon: 'users' as IconName,    label: 'Team' },
 ]
 
-export const Sidebar = ({ active, onNavigate }: { active: string; onNavigate: (screen: string) => void }) => (
-  <aside style={{ width: 'var(--sidebar-w)', height: '100%', flexShrink: 0, background: 'linear-gradient(180deg, #050F1E 0%, #081628 100%)', borderRight: '1px solid var(--b1)', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10 }}>
-    <div style={{ padding: '18px 16px 16px', borderBottom: '1px solid var(--b1)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ width: 38, height: 38, borderRadius: 10, overflow: 'hidden', flexShrink: 0, boxShadow: '0 0 18px rgba(139,92,246,0.35), 0 0 6px rgba(59,130,246,0.25)', background: 'linear-gradient(135deg, #4c1d95, #1e3a8a)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: 18, fontWeight: 900, color: 'white' }}>Z</span>
+export const Sidebar = ({ active, onNavigate, isOpen = false, onClose }: { active: string; onNavigate: (screen: string) => void; isOpen?: boolean; onClose?: () => void }) => {
+  const handleNav = (id: string) => {
+    onNavigate(id)
+    onClose?.()
+  }
+  return (
+    <>
+      <style>{`
+        .zc-sidebar-scrim { display: none; position: fixed; inset: 0; background: rgba(1,10,20,0.7); z-index: 199; }
+        .zc-sidebar { width: var(--sidebar-w); height: 100%; flex-shrink: 0; background: linear-gradient(180deg, #050F1E 0%, #081628 100%); border-right: 1px solid var(--b1); display: flex; flex-direction: column; position: relative; z-index: 10; }
+        @media (max-width: 767px) {
+          .zc-sidebar {
+            position: fixed; top: 0; left: 0; height: 100%; width: 260px !important;
+            z-index: 200; transform: translateX(-100%); transition: transform 0.25s var(--ease, cubic-bezier(0.22,1,0.36,1));
+          }
+          .zc-sidebar.zc-sidebar-open { transform: translateX(0); box-shadow: 4px 0 40px rgba(0,0,0,0.6); }
+          .zc-sidebar-scrim.zc-sidebar-open { display: block; }
+        }
+      `}</style>
+      {/* Scrim overlay for mobile */}
+      <div className={`zc-sidebar-scrim${isOpen ? ' zc-sidebar-open' : ''}`} onClick={onClose} />
+      <aside className={`zc-sidebar${isOpen ? ' zc-sidebar-open' : ''}`}>
+        <div style={{ padding: '18px 16px 16px', borderBottom: '1px solid var(--b1)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 10, overflow: 'hidden', flexShrink: 0, boxShadow: '0 0 18px rgba(139,92,246,0.35), 0 0 6px rgba(59,130,246,0.25)', background: 'linear-gradient(135deg, #4c1d95, #1e3a8a)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontSize: 18, fontWeight: 900, color: 'white' }}>Z</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.01em', color: 'var(--t1)' }}>ZebraCat</div>
+              <div style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 500, letterSpacing: '0.05em' }}>AI PUBLICITY</div>
+            </div>
+          </div>
         </div>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.01em', color: 'var(--t1)' }}>ZebraCat</div>
-          <div style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 500, letterSpacing: '0.05em' }}>AI PUBLICITY</div>
+        <nav style={{ padding: '10px 8px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <div style={{ fontSize: 9, color: 'var(--t4)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 8px 6px' }}>Main</div>
+          {NAV_ITEMS.map(item => {
+            const isActive = active === item.id
+            return (
+              <button key={item.id} onClick={() => handleNav(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', background: isActive ? 'linear-gradient(90deg, var(--purple-d), var(--blue-g))' : 'transparent', border: `1px solid ${isActive ? 'var(--b2)' : 'transparent'}`, color: isActive ? 'var(--t1)' : 'var(--t3)', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.18s var(--ease)', textAlign: 'left', position: 'relative' }}>
+                {isActive && <div style={{ position: 'absolute', left: 0, top: '20%', height: '60%', width: 3, background: 'var(--purple)', borderRadius: '0 3px 3px 0' }} />}
+                <Icon name={item.icon} size={15} color={isActive ? 'var(--purple-l)' : 'currentColor'} />
+                {item.label}
+                {item.id === 'campaigns' && <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, color: 'var(--mint)', background: 'var(--mint-d)', padding: '1px 6px', borderRadius: 9 }}>4</span>}
+              </button>
+            )
+          })}
+          <div style={{ height: 1, background: 'var(--b1)', margin: '8px 4px' }} />
+          <div style={{ fontSize: 9, color: 'var(--t4)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 8px 6px' }}>Operations</div>
+          {BOTTOM_ITEMS.map(item => {
+            const isActive = active === item.id
+            return (
+              <button key={item.id} onClick={() => handleNav(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', background: isActive ? 'linear-gradient(90deg, var(--purple-d), var(--blue-g))' : 'transparent', border: `1px solid ${isActive ? 'var(--b2)' : 'transparent'}`, color: isActive ? 'var(--t1)' : 'var(--t3)', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.18s var(--ease)', textAlign: 'left' }}>
+                <Icon name={item.icon} size={15} color={isActive ? 'var(--purple-l)' : 'currentColor'} />
+                {item.label}
+              </button>
+            )
+          })}
+        </nav>
+        <div style={{ borderTop: '1px solid var(--b1)', padding: '12px 12px' }}>
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ background: 'var(--b0)', border: '1px solid var(--b1)', borderRadius: 8, padding: '7px 10px' }}>
+              <div style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Wallet</div>
+              <div className="zc-mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--mint-l)' }}>₹4,28,500</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, fontWeight: 700, color: 'white' }}>A</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--t1)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Arjun Mehta</div>
+              <div style={{ fontSize: 10, color: 'var(--t3)' }}>Brand Manager</div>
+            </div>
+            <Icon name="settings" size={14} color="var(--t3)" />
+          </div>
         </div>
-      </div>
-    </div>
-    <nav style={{ padding: '10px 8px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <div style={{ fontSize: 9, color: 'var(--t4)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 8px 6px' }}>Main</div>
-      {NAV_ITEMS.map(item => {
-        const isActive = active === item.id
-        return (
-          <button key={item.id} onClick={() => onNavigate(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', background: isActive ? 'linear-gradient(90deg, var(--purple-d), var(--blue-g))' : 'transparent', border: `1px solid ${isActive ? 'var(--b2)' : 'transparent'}`, color: isActive ? 'var(--t1)' : 'var(--t3)', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.18s var(--ease)', textAlign: 'left', position: 'relative' }}>
-            {isActive && <div style={{ position: 'absolute', left: 0, top: '20%', height: '60%', width: 3, background: 'var(--purple)', borderRadius: '0 3px 3px 0' }} />}
-            <Icon name={item.icon} size={15} color={isActive ? 'var(--purple-l)' : 'currentColor'} />
-            {item.label}
-            {item.id === 'campaigns' && <span style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, color: 'var(--mint)', background: 'var(--mint-d)', padding: '1px 6px', borderRadius: 9 }}>4</span>}
-          </button>
-        )
-      })}
-      <div style={{ height: 1, background: 'var(--b1)', margin: '8px 4px' }} />
-      <div style={{ fontSize: 9, color: 'var(--t4)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '4px 8px 6px' }}>Operations</div>
-      {BOTTOM_ITEMS.map(item => {
-        const isActive = active === item.id
-        return (
-          <button key={item.id} onClick={() => onNavigate(item.id)} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', background: isActive ? 'linear-gradient(90deg, var(--purple-d), var(--blue-g))' : 'transparent', border: `1px solid ${isActive ? 'var(--b2)' : 'transparent'}`, color: isActive ? 'var(--t1)' : 'var(--t3)', fontSize: 13, fontWeight: isActive ? 600 : 400, transition: 'all 0.18s var(--ease)', textAlign: 'left' }}>
-            <Icon name={item.icon} size={15} color={isActive ? 'var(--purple-l)' : 'currentColor'} />
-            {item.label}
-          </button>
-        )
-      })}
-    </nav>
-    <div style={{ borderTop: '1px solid var(--b1)', padding: '12px 12px' }}>
-      <div style={{ marginBottom: 8 }}>
-        <div style={{ background: 'var(--b0)', border: '1px solid var(--b1)', borderRadius: 8, padding: '7px 10px' }}>
-          <div style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>Wallet</div>
-          <div className="zc-mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--mint-l)' }}>₹4,28,500</div>
-        </div>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 12, fontWeight: 700, color: 'white' }}>A</div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--t1)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Arjun Mehta</div>
-          <div style={{ fontSize: 10, color: 'var(--t3)' }}>Brand Manager</div>
-        </div>
-        <Icon name="settings" size={14} color="var(--t3)" />
-      </div>
-    </div>
-  </aside>
-)
+      </aside>
+    </>
+  )
+}

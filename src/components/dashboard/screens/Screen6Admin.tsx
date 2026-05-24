@@ -80,6 +80,22 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <style>{`
+        .s6-kpi-row      { display: flex; gap: 12px; }
+        .s6-overview-row { display: flex; gap: 16px; }
+        .s6-side-col     { flex: 0 0 340px; display: flex; flex-direction: column; gap: 12px; }
+        .s6-revenue-row  { display: flex; gap: 16px; }
+        .s6-payout-card  { flex: 0 0 260px; }
+        @media (max-width: 767px) {
+          .s6-kpi-row      { flex-wrap: wrap; }
+          .s6-kpi-row > *  { flex: 1 1 45%; min-width: 0; }
+          .s6-overview-row { flex-direction: column; }
+          .s6-side-col     { flex: 0 0 auto !important; }
+          .s6-revenue-row  { flex-direction: column; }
+          .s6-payout-card  { flex: 0 0 auto !important; }
+          .s6-screen-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        }
+      `}</style>
       <TopBar title="Operations" subtitle="Network management, approvals & system health"
         actions={
           <div style={{ display: 'flex', gap: 6 }}>
@@ -93,14 +109,14 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
       <div style={{ flex: 1, overflow: 'hidden', overflowY: 'auto', padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
         {activeTab === 'overview' && <>
-          <div style={{ display: 'flex', gap: 12 }}>
+          <div className="s6-kpi-row">
             <KPICard icon="screen"  label="Total Screens"      value="2,693"  sub="35 offline"          color="var(--purple)" delay={0} />
             <KPICard icon="zap"     label="Active Campaigns"   value="47"     sub="12 pending"          color="var(--blue)"   delay={60} />
             <KPICard icon="trending" label="MTD Revenue"       value="₹68.4L" sub="+23.1% MoM"          color="var(--mint)"   delay={120} />
             <KPICard icon="users"   label="Active Advertisers" value="284"    sub="12 new this month"   color="var(--cyan)"   delay={180} />
           </div>
 
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div className="s6-overview-row">
             <div className="zc-glass-card" style={{ flex: 1 }}>
               <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--b1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: 13, fontWeight: 600 }}>System Health</span>
@@ -118,7 +134,7 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
               ))}
             </div>
 
-            <div style={{ flex: '0 0 340px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div className="s6-side-col">
               <div className="zc-glass-card" style={{ overflow: 'hidden' }}>
                 <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--b1)', fontSize: 13, fontWeight: 600 }}>Revenue vs Target</div>
                 <div style={{ padding: '14px 16px' }}>
@@ -164,24 +180,26 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
               {cities.map(c => <button key={c} onClick={() => setCityFilter(c)} style={{ fontSize: 10, fontWeight: 600, padding: '3px 9px', borderRadius: 99, cursor: 'pointer', background: cityFilter === c ? 'var(--purple-d)' : 'transparent', border: `1px solid ${cityFilter === c ? 'var(--bglow)' : 'var(--b2)'}`, color: cityFilter === c ? 'var(--purple-l)' : 'var(--t3)', transition: 'all 0.15s' }}>{c}</button>)}
               <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--t3)' }}>{filteredScreens.length} screens</span>
             </div>
-            <div style={{ flex: 1, overflowY: 'auto' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '90px 100px 1fr 90px 70px 60px 70px 70px', padding: '6px 16px', borderBottom: '1px solid var(--b1)', position: 'sticky', top: 0, background: 'var(--s1)', zIndex: 1 }}>
-                {['Screen ID','City','Location','Type','Status','Size','CPM','Revenue'].map(h => <div key={h} style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</div>)}
-              </div>
-              {filteredScreens.map((s, i) => (
-                <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '90px 100px 1fr 90px 70px 60px 70px 70px', padding: '9px 16px', borderBottom: '1px solid var(--b0)', alignItems: 'center', cursor: 'pointer' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(139,92,246,0.04)'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
-                  <div className="zc-mono" style={{ fontSize: 11, color: 'var(--purple-l)', fontWeight: 600 }}>{s.id}</div>
-                  <div style={{ fontSize: 11, color: 'var(--t2)' }}>{s.city}</div>
-                  <div style={{ fontSize: 11, color: 'var(--t1)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.loc}</div>
-                  <div style={{ fontSize: 10, color: 'var(--t3)', background: 'var(--b1)', padding: '2px 7px', borderRadius: 99, width: 'fit-content' }}>{s.type}</div>
-                  <div><StatusBadge status={s.status} /></div>
-                  <div className="zc-mono" style={{ fontSize: 11, color: 'var(--t3)' }}>{s.size}</div>
-                  <div className="zc-mono" style={{ fontSize: 11, color: 'var(--t1)' }}>{s.cpm}</div>
-                  <div className="zc-mono" style={{ fontSize: 11, color: 'var(--mint-l)', fontWeight: 600 }}>{s.revenue}</div>
+            <div className="s6-screen-table" style={{ flex: 1, overflowY: 'auto' }}>
+              <div style={{ minWidth: 640 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '90px 100px 1fr 90px 70px 60px 70px 70px', padding: '6px 16px', borderBottom: '1px solid var(--b1)', position: 'sticky', top: 0, background: 'var(--s1)', zIndex: 1 }}>
+                  {['Screen ID','City','Location','Type','Status','Size','CPM','Revenue'].map(h => <div key={h} style={{ fontSize: 9, color: 'var(--t3)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{h}</div>)}
                 </div>
-              ))}
+                {filteredScreens.map((s, i) => (
+                  <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '90px 100px 1fr 90px 70px 60px 70px 70px', padding: '9px 16px', borderBottom: '1px solid var(--b0)', alignItems: 'center', cursor: 'pointer' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(139,92,246,0.04)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+                    <div className="zc-mono" style={{ fontSize: 11, color: 'var(--purple-l)', fontWeight: 600 }}>{s.id}</div>
+                    <div style={{ fontSize: 11, color: 'var(--t2)' }}>{s.city}</div>
+                    <div style={{ fontSize: 11, color: 'var(--t1)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.loc}</div>
+                    <div style={{ fontSize: 10, color: 'var(--t3)', background: 'var(--b1)', padding: '2px 7px', borderRadius: 99, width: 'fit-content' }}>{s.type}</div>
+                    <div><StatusBadge status={s.status} /></div>
+                    <div className="zc-mono" style={{ fontSize: 11, color: 'var(--t3)' }}>{s.size}</div>
+                    <div className="zc-mono" style={{ fontSize: 11, color: 'var(--t1)' }}>{s.cpm}</div>
+                    <div className="zc-mono" style={{ fontSize: 11, color: 'var(--mint-l)', fontWeight: 600 }}>{s.revenue}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -216,7 +234,7 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
         )}
 
         {activeTab === 'revenue' && (
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div className="s6-revenue-row">
             <div className="zc-glass-card" style={{ flex: 1, overflow: 'hidden' }}>
               <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--b1)', fontSize: 13, fontWeight: 600 }}>Revenue Breakdown</div>
               <div style={{ padding: 16 }}>
@@ -234,7 +252,7 @@ export default function Screen6Admin({ onNavigate }: { onNavigate: (s: string) =
                 ))}
               </div>
             </div>
-            <div className="zc-glass-card" style={{ flex: '0 0 260px', padding: '14px 16px' }}>
+            <div className="zc-glass-card s6-payout-card" style={{ flex: '0 0 260px', padding: '14px 16px' }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 14 }}>Payout Summary — May 2026</div>
               {[{label:'Gross Revenue',value:'₹68.4L',color:'var(--t1)'},{label:'Platform Fee (18%)',value:'–₹12.3L',color:'var(--red)'},{label:'GST (18%)',value:'–₹10.1L',color:'var(--amber)'},{label:'TDS (10%)',value:'–₹5.6L',color:'var(--amber)'},{label:'Net Payout',value:'₹40.4L',color:'var(--mint-l)'}].map(({label,value,color},i) => (
                 <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: i < 4 ? '1px solid var(--b1)' : 'none', fontSize: 12 }}>
