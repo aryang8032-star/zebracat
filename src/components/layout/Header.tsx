@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import {
-  Menu, X, ChevronDown, Sun, Moon, ArrowUpRight,
+  Menu, X, ChevronDown, Sun, Moon, ArrowUpRight, LogIn,
   Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus, Zap,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -181,6 +181,18 @@ export function Header() {
                   : <Moon className="w-4 h-4" aria-hidden />}
               </button>
               <Link
+                href="/dashboard"
+                className={cn(
+                  'flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-semibold transition-all',
+                  scrolled
+                    ? 'bg-violet-500 text-white hover:bg-violet-600 shadow-sm'
+                    : 'bg-white/15 border border-white/30 text-white hover:bg-white/25 backdrop-blur-sm',
+                )}
+              >
+                <LogIn className="w-3.5 h-3.5" aria-hidden />
+                Login
+              </Link>
+              <Link
                 href="/book"
                 className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-violet-500 text-white text-sm font-semibold hover:bg-violet-600 transition-colors shadow-violet"
               >
@@ -331,6 +343,14 @@ export function Header() {
             </div>
 
             <div className="p-4 border-t border-ink/10 dark:border-white/10 space-y-3">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-full border border-violet-500/30 text-violet-500 font-medium hover:bg-violet-500/10 transition-colors"
+              >
+                <LogIn className="w-4 h-4" aria-hidden />
+                Login
+              </Link>
               <Link
                 href="/book"
                 onClick={() => setMobileOpen(false)}
