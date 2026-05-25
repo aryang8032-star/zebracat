@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {
   Facebook, Twitter, Instagram, Linkedin,
-  Mail, Phone, MapPin, ArrowUpRight, Zap
+  Mail, Phone, MapPin,
 } from 'lucide-react'
 import { COMPANY, SERVICES } from '@/lib/constants'
 import { NewsletterForm } from '@/components/ui/NewsletterForm'
@@ -13,7 +13,6 @@ const footerNav = {
     { label: 'Case Studies', href: '/case-studies' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Blog', href: '/blog' },
-    { label: 'ZAP STAR', href: '/zap-star' },
     { label: 'FAQs', href: '/#faqs' },
     { label: 'Contact', href: '/contact' },
   ],
@@ -167,23 +166,6 @@ export function Footer() {
                 </a>
               </li>
             </ul>
-
-            {/* Partner program */}
-            <div className="mt-6 p-4 rounded-xl bg-violet-500/10 border border-violet-500/20">
-              <div className="flex items-center gap-2 mb-2">
-                <Zap className="w-4 h-4 text-violet-400" aria-hidden />
-                <span className="text-xs font-bold text-violet-400 uppercase tracking-wider">ZAP STAR</span>
-              </div>
-              <p className="text-xs text-white/40 mb-3 leading-relaxed">
-                Partner with us. Earn more. Grow together.
-              </p>
-              <Link
-                href="/zap-star"
-                className="inline-flex items-center gap-1 text-xs text-violet-400 font-semibold hover:text-violet-300"
-              >
-                Join Now <ArrowUpRight className="w-3 h-3" aria-hidden />
-              </Link>
-            </div>
           </div>
         </div>
 

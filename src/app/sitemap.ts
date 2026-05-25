@@ -12,7 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/pricing`, changeFrequency: 'weekly' as const, priority: 0.8 },
     { url: `${BASE_URL}/blog`, changeFrequency: 'daily' as const, priority: 0.7 },
     { url: `${BASE_URL}/book`, changeFrequency: 'weekly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/zap-star`, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${BASE_URL}/contact`, changeFrequency: 'monthly' as const, priority: 0.8 },
   ]
 

@@ -7,7 +7,7 @@ import { ChevronDown, MessageCircle } from 'lucide-react'
 import { FAQS, COMPANY } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-const categories = ['All', 'Booking', 'Payments', 'Creative', 'Reporting', 'Partners']
+const categories = ['All', 'Booking', 'Payments', 'Creative', 'Reporting']
 
 export function FAQSection() {
   const [activeCategory, setActiveCategory] = useState('All')

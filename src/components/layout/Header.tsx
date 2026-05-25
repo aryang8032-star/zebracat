@@ -8,7 +8,7 @@ import { useTheme } from 'next-themes'
 import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import {
   Menu, X, ChevronDown, Sun, Moon, ArrowUpRight, LogIn,
-  Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus, Zap,
+  Newspaper, Radio, Tv, Film, Monitor, Users, Building2, Bus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SERVICES } from '@/lib/constants'
@@ -69,7 +69,6 @@ export function Header() {
     { label: 'Case Studies', href: '/case-studies' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Blog', href: '/blog' },
-    { label: 'ZAP STAR', href: '/zap-star', highlight: true },
     { label: 'Contact', href: '/contact' },
   ]
 
@@ -150,13 +149,7 @@ export function Header() {
                       href={link.href}
                       className={cn(
                         'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                        link.highlight
-                          ? scrolled
-                            ? 'text-violet-500 bg-violet-500/10 hover:bg-violet-500/20'
-                            : 'text-violet-300 bg-violet-500/20 hover:bg-violet-500/30'
-                          : pathname === link.href
-                            ? 'text-violet-500'
-                            : navTextBase,
+                        pathname === link.href ? 'text-violet-500' : navTextBase,
                       )}
                     >
                       {link.label}
@@ -318,11 +311,9 @@ export function Header() {
                       pathname === link.href || (link.hasDropdown && pathname.startsWith('/services'))
                         ? 'bg-violet-500/10 text-violet-500'
                         : 'hover:bg-ink/5 dark:hover:bg-white/8',
-                      link.highlight && 'text-violet-500',
                     )}
                   >
                     {link.label}
-                    {link.highlight && <Zap className="w-4 h-4" aria-hidden />}
                   </Link>
                   {link.hasDropdown && (
                     <div className="ml-4 mt-1 space-y-0.5">

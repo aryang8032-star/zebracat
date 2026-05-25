@@ -228,24 +228,8 @@ export const NAV_LINKS = [
   { label: 'Case Studies', href: '/case-studies' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Blog', href: '/blog' },
-  { label: 'ZAP STAR', href: '/zap-star' },
   { label: 'Contact', href: '/contact' },
 ]
-
-export const ZAP_STAR = {
-  name: 'ZAP STAR',
-  tagline: 'Powering Your Success – Empowering Retailers, Accelerating Growth Nationwide.',
-  description: 'Join the Zebracat partner network and unlock exclusive benefits — co-branded campaigns, marketing support, priority booking, and revenue sharing.',
-  benefits: [
-    'Co-branded campaign support',
-    'Priority booking access',
-    'Revenue sharing on referrals',
-    'Free creative assistance',
-    'Dedicated account manager',
-    'Performance dashboard access',
-  ],
-  deckUrl: '/assets/zap-star-deck.pdf',
-}
 
 export const FAQS = [
   {
@@ -282,10 +266,5 @@ export const FAQS = [
     category: 'Reporting',
     question: 'What data and analytics do you provide post-campaign?',
     answer: 'Post-campaign reports include: total reach & impressions, frequency distribution, city-wise breakdown, ROI estimates, brand recall benchmarks, and comparison to industry benchmarks.',
-  },
-  {
-    category: 'Partners',
-    question: 'How does the ZAP STAR partner program work?',
-    answer: 'ZAP STAR is our retailer and agency partner network. Partners get co-branded campaigns, commission on referred clients, a dedicated support line, and access to our media rate cards. Apply via the ZAP STAR page.',
   },
 ]
