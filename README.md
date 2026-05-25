@@ -75,7 +75,6 @@ src/
 │   ├── pricing/            # Pricing / rate card
 │   ├── blog/               # Blog listing + [slug] posts
 │   ├── book/               # Booking wizard
-│   ├── zap-star/           # Partner program
 │   ├── contact/            # Contact page
 │   └── api/contact/        # Contact form API
 ├── components/
@@ -111,7 +110,6 @@ Available content types:
 - **Testimonials** — Client reviews
 - **Blog Posts** — Editorial content with rich text
 - **FAQs** — Categorised FAQ entries
-- **Partners** — ZAP STAR partner profiles
 
 ---
 
@@ -147,7 +145,7 @@ The project is optimised for Vercel with:
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage (Hero → Services → Stats → Why Us → Dashboard → Testimonials → FAQ → Partners → Contact) |
+| `/` | Homepage (Hero → Services → Stats → Why Us → Dashboard → Testimonials → FAQ → Contact) |
 | `/about` | Company story and brand positioning |
 | `/services` | All 9 advertising mediums |
 | `/services/[slug]` | Individual service detail pages |
@@ -155,7 +153,6 @@ The project is optimised for Vercel with:
 | `/pricing` | Indicative rate cards |
 | `/book` | Multi-step booking wizard |
 | `/blog` | Editorial content |
-| `/zap-star` | Partner program |
 | `/contact` | Contact form + map + WhatsApp |
 
 ---

@@ -7,7 +7,6 @@ import { WhyChooseUs } from '@/components/sections/WhyChooseUs'
 import { DashboardPreview } from '@/components/sections/DashboardPreview'
 import { Testimonials } from '@/components/sections/Testimonials'
 import { FAQSection } from '@/components/sections/FAQSection'
-import { PartnerNetwork } from '@/components/sections/PartnerNetwork'
 import { ContactSection } from '@/components/sections/ContactSection'
 
 export const metadata: Metadata = {
@@ -26,7 +25,6 @@ export default function HomePage() {
       <DashboardPreview />
       <Testimonials />
       <FAQSection />
-      <PartnerNetwork />
       <ContactSection />
     </>
   )
